@@ -1,0 +1,3 @@
+[submodule "cpp-mcp"]
+	path = cpp-mcp
+	url = https://github.com/SeonghakHong-Sch/cpp-mcp.git
