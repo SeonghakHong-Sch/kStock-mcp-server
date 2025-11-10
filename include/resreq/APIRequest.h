@@ -1,5 +1,9 @@
+#include "json.hpp"
+
 #include <string>
 #include <json.hpp>
+#include <ctime>
+#include <iostream>
 
 using json = nlohmann::json;
 
@@ -7,12 +11,31 @@ namespace APIRequest {
 
 class baseAPIRequest {
 
-private:
+protected:
+    //requestid
+    std::string request_id;
+
+    //공통 요청 헤더 정보
+    std::string content_type;
+    std::string tr_id;
+    std::string custtype;
+    
+    //부가정보(로깅 타임스탬프 등)
+    std::time_t timestamp;
+
 
 public:
-    baseAPIRequest();
+    //생성, 소멸
+    baseAPIRequest(std::string request_id);
     ~baseAPIRequest();
 
+    //
+    virtual void setRequestInfo(const json& request_info) = 0;
+    virtual json getRequestInfo() = 0;
+    
+    void setTimestamp();
+    //로거용 타임스탬프 반환
+    std::time_t getTimestamp() const;
 }
 
 
@@ -29,9 +52,21 @@ public:
 
 class AccountInfoRequest : public baseAPIRequest {
 
+private:
+    //요청 필수 파라미터
+    std::string CANO;
+    std::string ACNT_PRDT_CD;
+    std::string INQR_DVSN
+    std::string FUND_STTL_ICLD_YN
+    std::string PRCS_DVSN;
+
 public:
-    AccountInfoRequest();
+    AccountInfoRequest(std::string request_id);
     ~AccountInfoRequest();
+
+    void setRequestInfo(const json& request_info) override;
+    json getRequestInfo() override;
+
 }
 
 class StockPriceRequest : public baseAPIRequest {
