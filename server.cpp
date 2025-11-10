@@ -8,6 +8,7 @@
 #include "mcp_server.h"
 #include "mcp_tool.h"
 #include "mcp_resource.h"
+#include "httplib.h"
 
 #include <iostream>
 #include <chrono>
@@ -15,6 +16,10 @@
 #include <thread>
 #include <filesystem>
 #include <algorithm>
+#include <json.hpp>
+#include <cstdlib>
+
+using json = nlohmann::json;
 
 // Tool handler for getting current time
 mcp::json get_time_handler(const mcp::json& params, const std::string& /* session_id */) {
@@ -173,7 +178,21 @@ int main() {
     // // Register resources
     // auto file_resource = std::make_shared<mcp::file_resource>("./Makefile");
     // server.register_resource("file://./Makefile", file_resource);
-    
+    std::cout << "test" << std::endl;
+    httplib::Client test_client("https://openapi.koreainvestment.com:9443");
+    json body = {
+        {"grant_type", "client_credentials"},
+        {"appkey", std::getenv("K_appkey")},
+        {"appsecret", std::getenv("K_appsecret")}
+    };
+    auto res = test_client.Post("/oauth2/tokenP", body.dump(), "application/json");
+    if (res && res->status == 200) {
+        std::cout << "API request successful: " << res->body << std::endl;
+    } else {
+        std::cout << "API request failed" << std::endl;
+    }
+
+
     // Start server
     std::cout << "Starting MCP server at " << srv_conf.host << ":" << srv_conf.port << std::endl;
     std::cout << "Press Ctrl+C to stop the server" << std::endl;

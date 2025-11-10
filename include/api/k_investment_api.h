@@ -1,6 +1,7 @@
 #include "httplib.h"
 #include <string>
 #include "json.hpp"
+using json = nlohmann::json;
 
 namespace KInvestmentAPI {
 
