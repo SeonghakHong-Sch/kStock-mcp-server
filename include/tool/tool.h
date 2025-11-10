@@ -1,5 +1,7 @@
-#ifndef QUERY_UTIL_H
-#define QUERY_UTIL_H
+#ifndef QUERY_TOOL_H
+#define QUERY_TOOL_H
+
+#include "json.hpp"
 
 #include <string>
 #include <map>
@@ -7,17 +9,26 @@
 
 namespace tool {
 
-std::string build_query(const std::map<std::string, std::string>& params) {
+std::string build_query(const json& params) {
     std::ostringstream oss;
     bool first = true;
-    for (const auto& p : params) {
+    for (auto it = params.begin(); it != params.end(); ++it) {
         if (!first) oss << "&";
         first = false;
-        oss << p.first << "=" << p.second;
+        oss << it.key() << "=" << it.value().get<std::string>();
     }
     return oss.str();
 }
 
+bool check_json(const json& params, const std::vector<std::string>& required_keys) {
+    for(const auto& key : required_keys) {
+        if(!params.contains(key)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 } // namespace tool
 
-#endif // QUERY_UTIL_H
+#endif // QUERY_TOOL_H
