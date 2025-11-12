@@ -44,14 +44,18 @@ void AccountInfoRequest::setRequestInfo(const json& request_info) {
 //getRequestInfo 구현
 json AccountInfoRequest::getRequestInfo() {
     return {
-        {"content-type", content_type},
-        {"tr_id", tr_id},
-        {"custtype", custtype},
-        {"CANO", CANO},
-        {"ACNT_PRDT_CD", ACNT_PRDT_CD},
-        {"INQR_DVSN", INQR_DVSN},
-        {"FUND_STTL_ICLD_YN", FUND_STTL_ICLD_YN},
-        {"PRCS_DVSN", PRCS_DVSN}
+        {"headers", {
+            {"content-type", content_type},
+            {"tr_id", tr_id},
+            {"custtype", custtype}
+        }},
+        {"query_params", {
+            {"CANO", CANO},
+            {"ACNT_PRDT_CD", ACNT_PRDT_CD},
+            {"INQR_DVSN", INQR_DVSN},
+            {"FUND_STTL_ICLD_YN", FUND_STTL_ICLD_YN},
+            {"PRCS_DVSN", PRCS_DVSN}
+        }}
     };
 };
 
