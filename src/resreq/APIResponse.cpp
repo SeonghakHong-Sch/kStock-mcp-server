@@ -33,7 +33,7 @@ json AccountInfoResponse::getResponseInfo() {
     return {
         {"account_list", account_list},
         {"balance_list", balance_list}
-    }
+    };
 }
 
 json AccountInfoResponse::toJSON() {

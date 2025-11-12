@@ -5,7 +5,10 @@ using json = nlohmann::json;
 namespace KInvestmentAPI {
 
     
-KInvestmentAPI::KInvestmentAPI() {
+KInvestmentAPI::KInvestmentAPI() :
+    client("https://openapi.koreainvestment.com:9443"),
+    base_url("https://openapi.koreainvestment.com:9443")
+{
 
 }
 
@@ -24,7 +27,6 @@ void KInvestmentAPI::setClient(json config) {
     appkey = config["appkey"];
     appsecret = config["appsecret"];
     //std::string access_token = config["access_token"];
-    client = httplib::Client(base_url);
 }
 
 //엑세스 토큰 발급 함수
@@ -69,8 +71,8 @@ void KInvestmentAPI::request_k_stock(const json& request ,json& response, int me
     const std::string url = request["etc"]["url"];
     const std::string api_name = request["etc"]["api_name"];
     const httplib::Headers headers = {
-        request[headers].begin(), request["headers"].end(),
-        {"autohrization", access_token},
+        request["headers"].begin(), request["headers"].end(),
+        {"authorization", access_token},
         {"appkey", appkey},
         {"appsecret", appsecret}
     };
@@ -80,7 +82,7 @@ void KInvestmentAPI::request_k_stock(const json& request ,json& response, int me
 
     switch(method) {
         case 0: {
-            auto res = client.Get(url + '?' + query_params, headers);
+            auto res = client.Get(url + "?" + query_params, headers);
             if (res && res->status == 200) {
                 response = json::parse(res->body);
                 std::cout << "GET request " + api_name + " successful" << std::endl;
@@ -97,6 +99,7 @@ void KInvestmentAPI::request_k_stock(const json& request ,json& response, int me
             //     std::cout << "POST request" + request["etc"]["api_name"] + " failed" << std::endl;
             // }
         }
+        break;
     }
 
 

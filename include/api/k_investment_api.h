@@ -31,7 +31,7 @@ public:
 
 
     //request 관련
-    void request_k_stock(const json& request ,json& response, std::string method);
+    void request_k_stock(const json& request ,json& response, int method);
 };
 
 
