@@ -49,7 +49,8 @@ json AccountInfoRequest::getRequestInfo() {
             "etc", {
                 {"request_id", request_id},
                 {"url", url},
-                {"time", timestamp}
+                {"time", timestamp},
+                {"api_name", api_name}
             }
         },
         {"headers", {
