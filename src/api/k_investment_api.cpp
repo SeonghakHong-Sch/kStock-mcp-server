@@ -1,6 +1,6 @@
 #include "k_investment_api.h"
 
-using namespace json = nlohmann::json;
+using json = nlohmann::json;
 
 namespace KInvestmentAPI {
 
@@ -54,7 +54,7 @@ void KInvestmentAPI::revokeAccessToken() {
         {"appkey", std::getenv("K_appkey")},
         {"appsecret", std::getenv("K_appsecret")},
         {"token", access_token}
-    }
+    };
 
     auto res = client.Post("/oauth2/revokeP", body.dump(), "application/json");
     if (res && res->status == 200) {
@@ -64,22 +64,23 @@ void KInvestmentAPI::revokeAccessToken() {
     }
 }
 
-void KInvestmentAPI::request_k_stock(const json& request ,json& response, std::string method) {
+void KInvestmentAPI::request_k_stock(const json& request ,json& response, int method) {
 
     const std::string url = request["etc"]["url"];
     const std::string api_name = request["etc"]["api_name"];
     const httplib::Headers headers = {
-        request[headers].begin(), request[headers].end(),
+        request[headers].begin(), request["headers"].end(),
         {"autohrization", access_token},
         {"appkey", appkey},
         {"appsecret", appsecret}
-    }
+    };
     const std::string query_params = tool::build_query(request["query_params"]);
     const std::string body = tool::build_query(request["body"]);
 
+
     switch(method) {
-        case "GET": {
-            auto res = client.Get(url + '?' + query_params, headers)
+        case 0: {
+            auto res = client.Get(url + '?' + query_params, headers);
             if (res && res->status == 200) {
                 response = json::parse(res->body);
                 std::cout << "GET request " + api_name + " successful" << std::endl;
@@ -87,7 +88,7 @@ void KInvestmentAPI::request_k_stock(const json& request ,json& response, std::s
                 std::cout << "GET request " + api_name + " failed" << std::endl;
             }
         }
-        case "POST": {
+        case 1: {
             // auto res = client.Post(url + '?' + query_params, headers, body, "application/x-www-form-urlencoded")
             // if (res && res->status == 200) {
             //     response = json::parse(res->body);

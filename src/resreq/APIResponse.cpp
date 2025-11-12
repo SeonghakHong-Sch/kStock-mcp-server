@@ -19,7 +19,7 @@ std::time_t baseResponse::getTimestamp() const {
 
 
 /*AccountInfoResponse-----------------------------------------------------------*/
-void AccountInfoRequest::setResponseInfo(const json& response_info) {
+void AccountInfoResponse::setResponseInfo(const json& response_info) {
     content_type = response_info["content-type"];
     rt_cd = response_info["rt_cd"];
     msg_cd = response_info["msg_cd"];
@@ -29,14 +29,14 @@ void AccountInfoRequest::setResponseInfo(const json& response_info) {
     //추후 구현
 }
 
-void AccountInfoRequest::getResponseInfo() {
+json AccountInfoResponse::getResponseInfo() {
     return {
         {"account_list", account_list},
         {"balance_list", balance_list}
     }
 }
 
-void AccountInfoRequest::toJSON() {
+json AccountInfoResponse::toJSON() {
     return {
         {"content-type", content_type},
         {"rt_cd", rt_cd},
