@@ -4,19 +4,19 @@ namespace APIRequest {
 
 /*baseAPIRequest-----------------------------------------------------------*/
 //생성,소멸
-baseAPIRequest::baseAPIRequest(std::string request_id){
+baseRequest::baseRequest(std::string request_id){
     this->request_id = request_id;
 };
-baseAPIRequest::~baseAPIRequest(){};
+baseRequest::~baseRequest(){};
 
 
 //로거용 타임스탬프
-std::time_t baseAPIRequest::getTimestamp() const {
+std::time_t baseRequest::getTimestamp() const {
     return timestamp;
 };
 
 //요청 URL 반환
-std::string baseAPIRequest::getURL() const {
+std::string baseRequest::getURL() const {
     return url;
 }
 
@@ -46,7 +46,6 @@ void AccountInfoRequest::setRequestInfo(const json& request_info) {
 //getRequestInfo 구현
 json AccountInfoRequest::getRequestInfo() {
     result = {
-        {"time", timestamp},
         {"content-type", content_type},
         {"tr_id", tr_id},
         {"custtype", custtype},

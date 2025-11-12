@@ -9,7 +9,7 @@ using json = nlohmann::json;
 
 namespace APIRequest {
 
-class baseAPIRequest {
+class baseRequest {
 
 protected:
     //url
@@ -36,7 +36,7 @@ public:
     virtual json getRequestInfo() = 0; //요청 정보만 반환(부가정보 제외)
     virtual json toJSON() = 0; //전체 요청 정보 반환(부가정보 포함)
     
-    //로거용 타임스탬프 반환
+    //타임스탬프 반환
     std::time_t getTimestamp() const;
 
     //요청 URL 반환
@@ -72,7 +72,7 @@ public:
     void setRequestInfo(const json& request_info) override;
     json getRequestInfo() override;
     json toJSON() override;
-    
+
 
 }
 
