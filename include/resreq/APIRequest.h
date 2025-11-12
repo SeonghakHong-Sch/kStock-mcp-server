@@ -12,8 +12,8 @@ namespace APIRequest {
 class baseAPIRequest {
 
 protected:
-    //requestid
-    std::string request_id;
+    //url
+    std::string url;
 
     //공통 요청 헤더 정보
     std::string content_type;
@@ -21,8 +21,10 @@ protected:
     std::string custtype;
     
     //부가정보(로깅 타임스탬프 등)
-    std::time_t timestamp;
-
+    std::time_t timestamp = std::time(nullptr);
+    
+    //requestid
+    std::string request_id;
 
 public:
     //생성, 소멸
@@ -31,11 +33,14 @@ public:
 
     //
     virtual void setRequestInfo(const json& request_info) = 0;
-    virtual json getRequestInfo() = 0;
+    virtual json getRequestInfo() = 0; //요청 정보만 반환(부가정보 제외)
+    virtual json toJSON() = 0; //전체 요청 정보 반환(부가정보 포함)
     
-    void setTimestamp();
     //로거용 타임스탬프 반환
     std::time_t getTimestamp() const;
+
+    //요청 URL 반환
+    std::string getURL() const;
 }
 
 
@@ -66,6 +71,8 @@ public:
 
     void setRequestInfo(const json& request_info) override;
     json getRequestInfo() override;
+    json toJSON() override;
+    
 
 }
 
