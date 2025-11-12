@@ -2,12 +2,10 @@
 
 namespace APIRequest {
 
-/*baseAPIRequest-----------------------------------------------------------*/
+/*baseRequest-----------------------------------------------------------*/
 //생성,소멸
-baseRequest::baseRequest(std::string request_id){
-    this->request_id = request_id;
-};
-baseRequest::~baseRequest(){};
+baseRequest::baseRequest(std::string request_id): request_id(request_id) {};
+baseRequest::~baseRequest(){}
 
 
 //로거용 타임스탬프
@@ -21,12 +19,12 @@ std::string baseRequest::getURL() const {
 }
 
 
-/*AccountInfoAPIRequest-----------------------------------------------------------*/
+/*AccountInfoRequest-----------------------------------------------------------*/
 //생성, 소멸
-AccountInfoRequest::AccountInfoRequest(std::string request_id) {
-    this->request_id = request_id;
-    this->url = "/uapi/domestic-stock/v1/trading/inquire-balance";
-};
+AccountInfoRequest::AccountInfoRequest(std::string request_id):
+    baseRequest(request_id),
+    url("/uapi/domestic-stock/v1/trading/inquire-balance") {}
+
 AccountInfoRequest::~AccountInfoRequest(){};
 
 
@@ -45,7 +43,7 @@ void AccountInfoRequest::setRequestInfo(const json& request_info) {
 
 //getRequestInfo 구현
 json AccountInfoRequest::getRequestInfo() {
-    result = {
+    return {
         {"content-type", content_type},
         {"tr_id", tr_id},
         {"custtype", custtype},
@@ -59,8 +57,8 @@ json AccountInfoRequest::getRequestInfo() {
 
 
 //toJSON 구현
-json AccountInfoAPIRequest::toJSON() {
-    result = {
+json AccountInfoRequest::toJSON() {
+    return {
         {"request_id", request_id},
         {"url", url},
         {"time", timestamp},

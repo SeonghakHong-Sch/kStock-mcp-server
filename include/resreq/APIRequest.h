@@ -1,7 +1,6 @@
 #include "json.hpp"
 
 #include <string>
-#include <json.hpp>
 #include <ctime>
 #include <iostream>
 
@@ -28,8 +27,8 @@ protected:
 
 public:
     //생성, 소멸
-    baseAPIRequest(std::string request_id);
-    ~baseAPIRequest();
+    baseRequest(std::string request_id);
+    ~baseRequest();
 
     //
     virtual void setRequestInfo(const json& request_info) = 0;
@@ -44,7 +43,7 @@ public:
 }
 
 
-class StockOrderRequest : public baseAPIRequest {
+class StockOrderRequest : public baseRequest {
 
 private:
 
@@ -55,14 +54,14 @@ public:
 } 
 
 
-class AccountInfoRequest : public baseAPIRequest {
+class AccountInfoRequest : public baseRequest {
 
 private:
     //요청 필수 파라미터
     std::string CANO;
     std::string ACNT_PRDT_CD;
-    std::string INQR_DVSN
-    std::string FUND_STTL_ICLD_YN
+    std::string INQR_DVSN;
+    std::string FUND_STTL_ICLD_YN;
     std::string PRCS_DVSN;
 
 public:
@@ -76,7 +75,7 @@ public:
 
 }
 
-class StockPriceRequest : public baseAPIRequest {
+class StockPriceRequest : public baseRequest {
 
 
 public:
@@ -85,7 +84,7 @@ public:
 }
 
 
-class OrderDetailRequest : public baseAPIRequest {
+class OrderDetailRequest : public baseRequest {
 
 
 public:
