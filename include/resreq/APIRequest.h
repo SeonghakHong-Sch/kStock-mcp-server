@@ -14,6 +14,9 @@ protected:
     //url
     std::string url;
 
+    //요청 api
+    std::string api_name;
+
     //공통 요청 헤더 정보
     std::string content_type;
     std::string tr_id;

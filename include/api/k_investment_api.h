@@ -31,12 +31,7 @@ public:
 
 
     //request 관련
-    APIResponse::StockOrderResponse requestStockOrder(const APIRequest::StockOrderRequest& request);
-    APIResponse::AccountInfoResponse requestAccountInfo(const APIRequest::AccountInfoRequest& request);
-    APIResponse::StockPriceResponse requestStockPrice(const APIRequest::StockPriceRequest& request);
-    APIResponse::OrderDetailResponse requestOrderDetail(const APIRequest::OrderDetailRequest& request);
-
-
+    void request_k_stock(const json& request ,json& response, std::string method);
 }
 
 

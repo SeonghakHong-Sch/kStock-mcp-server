@@ -23,7 +23,8 @@ std::string baseRequest::getURL() const {
 //생성, 소멸
 AccountInfoRequest::AccountInfoRequest(std::string request_id):
     baseRequest(request_id),
-    url("/uapi/domestic-stock/v1/trading/inquire-balance") {}
+    url("/uapi/domestic-stock/v1/trading/inquire-balance")
+    api_name("주식잔고 조회") {}
 
 AccountInfoRequest::~AccountInfoRequest(){};
 
@@ -44,6 +45,13 @@ void AccountInfoRequest::setRequestInfo(const json& request_info) {
 //getRequestInfo 구현
 json AccountInfoRequest::getRequestInfo() {
     return {
+        {
+            "etc", {
+                {"request_id", request_id},
+                {"url", url},
+                {"time", timestamp}
+            }
+        },
         {"headers", {
             {"content-type", content_type},
             {"tr_id", tr_id},

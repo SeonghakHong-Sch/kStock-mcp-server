@@ -18,6 +18,7 @@ std::string KInvestmentAPI::get_base_url() const {
     return base_url;
 }
 
+//한투 api 클라이언트 설정 함수
 void KInvestmentAPI::setClient(json config) {
     std::string base_url = config["base_url"];
     appkey = config["appkey"];
@@ -26,13 +27,15 @@ void KInvestmentAPI::setClient(json config) {
     client = httplib::Client(base_url);
 }
 
+//엑세스 토큰 발급 함수
 void KInvestmentAPI::setAccessToken() {
     json body = {
         {"grant_type", "client_credentials"},
         {"appkey", appkey},
         {"appsecret", appsecret}
     };
-    auto res = client.Post("/oauth2/tokenP", body.dump(), "application/json");
+    auto res = client.Post("/oauth2/tokenP", body.dump(), "application/json"); //std::shared_ptr<httplib::Response>
+    
     if (res && res->status == 200) {
         json response_json = json::parse(res->body);
         access_token = response_json["access_token"];
@@ -61,40 +64,41 @@ void KInvestmentAPI::revokeAccessToken() {
     }
 }
 
+void KInvestmentAPI::request_k_stock(const json& request ,json& response, std::string method) {
 
-APIResponse::StockOrderResponse KInvestmentAPI::requestStockOrder(const APIRequest::StockOrderRequest& request) {
-    APIResponse::StockOrderResponse response;
-
-    // 기달
-
-    return response;
-}
-
-APIResponse::AccountInfoResponse KInvestmentAPI::requestAccountInfo(const APIRequest::AccountInfoRequest& request) {
-    httplib::Headers headers = {
-        {"authorization", "Bearer " + access_token},
+    const std::string url = request["etc"]["url"];
+    const std::string api_name = request["etc"]["api_name"];
+    const httplib::Headers headers = {
+        request[headers].begin(), request[headers].end(),
+        {"autohrization", access_token},
         {"appkey", appkey},
-        {"appsecret", appsecret},
-        {"tr_id", "TTTC8434R"} //계좌정보조회 tr_id
-    };
+        {"appsecret", appsecret}
+    }
+    const std::string query_params = tool::build_query(request["query_params"]);
+    const std::string body = tool::build_query(request["body"]);
+
+    switch(method) {
+        case "GET": {
+            auto res = client.Get(url + '?' + query_params, headers)
+            if (res && res->status == 200) {
+                response = json::parse(res->body);
+                std::cout << "GET request " + api_name + " successful" << std::endl;
+            } else {
+                std::cout << "GET request " + api_name + " failed" << std::endl;
+            }
+        }
+        case "POST": {
+            // auto res = client.Post(url + '?' + query_params, headers, body, "application/x-www-form-urlencoded")
+            // if (res && res->status == 200) {
+            //     response = json::parse(res->body);
+            //     std::cout << "POST request" + request["etc"]["api_name"] + " successful" << std::endl;
+            // } else {
+            //     std::cout << "POST request" + request["etc"]["api_name"] + " failed" << std::endl;
+            // }
+        }
+    }
 
 
-    std::map<std::string, std::string> params = {
-        {"CANO", request.getCANO()},
-        {"ACNT_PRDT_CD", request.getACNT_PRDT_CD()},
-        {"INQR_DVSN", request.getINQR_DVSN()},
-        {"FUND_STTL_ICLD_YN", "N"},
-        {"PRCS_DVSN", "00"}
-    };
-    std::string query = tool::build_query(params);
-    
-    auto res = client.Get(("/uapi/domestic-stock/v1/trading/inquire-balance" + query).c_str(), headers);
-    
-    APIResponse::AccountInfoResponse response;
-
-    // 기달
-
-    return response;
-
+}
 
 } //namespace KInvestmentAPI
