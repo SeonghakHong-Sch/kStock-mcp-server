@@ -17,12 +17,7 @@ if(MCP_SSL)
     add_compile_definitions(MCP_SSL CPPHTTPLIB_OPENSSL_SUPPORT)
 endif()
 
-#include 헤더파일, cpp-mcp sdk 포함
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/cpp-mcp/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/cpp-mcp/common)
-
-# build MCP, 근데 example이랑 test 불필요한거 제외
+# mcp 라이브러리 빌드, 근데 example이랑 test 불필요한거 제외
 set(MCP_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cpp-mcp)
 add_library(mcp STATIC
     ${MCP_LIB_DIR}/src/mcp_message.cpp
@@ -38,13 +33,16 @@ target_include_directories(mcp PUBLIC
     ${MCP_LIB_DIR}/include
     ${MCP_LIB_DIR}/common
 )
-target_include_directories(mcp PUBLIC Threads:Threads)
 
-
+target_link_libraries(mcp PUBLIC Threads::Threads)
 if(MCP_SSL)
     target_link_libraries(mcp PUBLIC OpenSSL::SSL OpenSSL::Crypto)
 endif()
 
+add_subdirectory(src)
+
+
 # build
-add_executable(${PROJECT_NAME} server.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE mcp)
+#add_executable(${PROJECT_NAME} server.cpp)
+add_executable(${PROJECT_NAME} test.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE kstock_lib)
