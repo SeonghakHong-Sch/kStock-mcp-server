@@ -35,7 +35,7 @@ public:
 
     //타임스탬프 반환
     std::time_t getTimestamp() const;
-}
+};
 
 class AccountInfoResponse : public baseResponse {
 
@@ -52,7 +52,7 @@ public:
     json toJSON() override;
     
 
-}
+};
 
 
 } // namespace APIResponse

@@ -43,7 +43,7 @@ public:
 
     //요청 URL 반환
     std::string getURL() const;
-}
+};
 
 
 class StockOrderRequest : public baseRequest {
@@ -54,7 +54,7 @@ public:
     StockOrderRequest();
     ~StockOrderRequest();
 
-} 
+};
 
 
 class AccountInfoRequest : public baseRequest {
@@ -76,7 +76,7 @@ public:
     json toJSON() override;
 
 
-}
+};
 
 class StockPriceRequest : public baseRequest {
 
@@ -84,7 +84,7 @@ class StockPriceRequest : public baseRequest {
 public:
     StockPriceRequest();
     ~StockPriceRequest();
-}
+};
 
 
 class OrderDetailRequest : public baseRequest {
@@ -93,6 +93,6 @@ class OrderDetailRequest : public baseRequest {
 public:
     OrderDetailRequest();
     ~OrderDetailRequest();
-}
+};
 
 } // namespace APIRequest

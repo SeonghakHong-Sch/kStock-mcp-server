@@ -1,8 +1,18 @@
+#include "mcp_server.h"
 #include "mcp_tool.h"
 #include "mcp_resource.h"
+#include "httplib.h"
+#include "APIRequest.h"
+#include "APIResponse.h"
 
 #include <iostream>
-#include <string>
+#include <chrono>
+#include <ctime>
+#include <thread>
+#include <filesystem>
+#include <algorithm>
+#include <json.hpp>
+#include <cstdlib>
 
 using json = nlohmann::json;
 
