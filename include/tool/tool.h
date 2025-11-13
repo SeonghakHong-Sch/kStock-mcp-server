@@ -18,7 +18,7 @@ inline std::string build_query(const json& params) {
 
         oss << it.key() << "=";
 
-        // ✅ 문자열이면 따옴표 제거, 아니면 그대로 문자열화
+        //문자열이면 따옴표 제거, 아니면 그대로 문자열화
         const auto& value = it.value();
         if (value.is_string()) {
             oss << value.get<std::string>();

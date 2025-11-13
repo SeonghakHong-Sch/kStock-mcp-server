@@ -83,27 +83,33 @@ void KInvestmentAPI::request_k_stock(const json& request ,json& response, int me
     const std::string query_params = tool::build_query(request["query_params"]);
     //const std::string body = tool::build_query(request["body"]);
 
-
     switch(method) {
         case 0: {
+            std::cout << url + "?" + query_params << std::endl;
             auto res = client.Get(url + "?" + query_params, headers);
             if (res && res->status == 200) {
                 response = json::parse(res->body);
                 std::cout << "GET request " + api_name + " successful" << std::endl;
             } else {
                 std::cout << "GET request " + api_name + " failed" << std::endl;
+                std::cout << res->body << std::endl;
+                std::cout << res->status << std::endl;
             }
         }
         case 1: {
-            // auto res = client.Post(url + '?' + query_params, headers, body, "application/x-www-form-urlencoded")
-            // if (res && res->status == 200) {
-            //     response = json::parse(res->body);
-            //     std::cout << "POST request" + request["etc"]["api_name"] + " successful" << std::endl;
-            // } else {
-            //     std::cout << "POST request" + request["etc"]["api_name"] + " failed" << std::endl;
-            // }
+            const httplib::Params params = {
+            request["body"].begin(), request["body"].end()
+            };
+            auto res = client.Post(url, headers, params)
+            if (res && res->status == 200) {
+                response = json::parse(res->body);
+                std::cout << "POST request" + request["etc"]["api_name"] + " successful" << std::endl;
+            } else {
+                std::cout << "POST request" + request["etc"]["api_name"] + " failed" << std::endl;
+            }
         }
-        break;
+        default:
+            std::cerr << "Invalid method" << std::endl;
     }
 
 
