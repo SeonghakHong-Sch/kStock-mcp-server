@@ -1,5 +1,4 @@
-#ifndef QUERY_TOOL_H
-#define QUERY_TOOL_H
+#pragma once
 
 #include "json.hpp"
 
@@ -9,7 +8,7 @@
 
 namespace tool {
 
-std::string build_query(const json& params) {
+inline std::string build_query(const json& params) {
     std::ostringstream oss;
     bool first = true;
     for (auto it = params.begin(); it != params.end(); ++it) {
@@ -20,7 +19,7 @@ std::string build_query(const json& params) {
     return oss.str();
 }
 
-bool check_json(const json& params, const std::vector<std::string>& required_keys) {
+inline bool check_json(const json& params, const std::vector<std::string>& required_keys) {
     for(const auto& key : required_keys) {
         if(!params.contains(key)) {
             return false;
@@ -30,5 +29,3 @@ bool check_json(const json& params, const std::vector<std::string>& required_key
 }
 
 } // namespace tool
-
-#endif // QUERY_TOOL_H
