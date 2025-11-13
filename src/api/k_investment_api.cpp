@@ -23,7 +23,7 @@ std::string KInvestmentAPI::get_base_url() const {
 
 //한투 api 클라이언트 설정 함수
 void KInvestmentAPI::setClient(json config) {
-    std::string base_url = config["base_url"];
+    //std::string base_url = config["base_url"];
     appkey = config["appkey"];
     appsecret = config["appsecret"];
     //std::string access_token = config["access_token"];
