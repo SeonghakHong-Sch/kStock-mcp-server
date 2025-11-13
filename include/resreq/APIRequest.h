@@ -30,7 +30,7 @@ protected:
 
 public:
     //생성, 소멸
-    baseRequest(std::string request_id);
+    baseRequest(std::string request_id, std::string url, std::string api_name);
     ~baseRequest();
 
     //

@@ -70,12 +70,16 @@ void KInvestmentAPI::request_k_stock(const json& request ,json& response, int me
 
     const std::string url = request["etc"]["url"];
     const std::string api_name = request["etc"]["api_name"];
-    const httplib::Headers headers = {
-        request["headers"].begin(), request["headers"].end(),
-        {"authorization", access_token},
-        {"appkey", appkey},
-        {"appsecret", appsecret}
-    };
+    // const httplib::Headers headers = {
+    //     request["headers"].begin(), request["headers"].end(),
+    //     {"authorization", access_token},
+    //     {"appkey", appkey},
+    //     {"appsecret", appsecret}
+    // };
+    httplib::Headers headers;
+    for (auto& [key, value] : request["headers"].items()) {
+        headers.emplace(key, value.get<std::string>());
+    }
     const std::string query_params = tool::build_query(request["query_params"]);
     const std::string body = tool::build_query(request["body"]);
 

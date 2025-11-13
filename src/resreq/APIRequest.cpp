@@ -4,7 +4,10 @@ namespace APIRequest {
 
 /*baseRequest-----------------------------------------------------------*/
 //생성,소멸
-baseRequest::baseRequest(std::string request_id): request_id(request_id) {};
+baseRequest::baseRequest(std::string request_id, std::string url, std::string api_name):
+    request_id(request_id),
+    url(url),
+    api_name(api_name) {};
 baseRequest::~baseRequest(){}
 
 
@@ -22,9 +25,7 @@ std::string baseRequest::getURL() const {
 /*AccountInfoRequest-----------------------------------------------------------*/
 //생성, 소멸
 AccountInfoRequest::AccountInfoRequest(std::string request_id):
-    baseRequest(request_id),
-    url("/uapi/domestic-stock/v1/trading/inquire-balance"),
-    api_name("주식잔고 조회") {}
+    baseRequest(request_id, "/uapi/domestic-stock/v1/trading/inquire-balance", "주식잔고 조회") {}
 
 AccountInfoRequest::~AccountInfoRequest(){};
 
