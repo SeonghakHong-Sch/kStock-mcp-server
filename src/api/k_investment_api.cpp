@@ -1,5 +1,5 @@
 #include "k_investment_api.h"
-
+#include <typeinfo>
 using json = nlohmann::json;
 
 namespace KInvestmentAPI {
@@ -37,11 +37,11 @@ void KInvestmentAPI::setAccessToken() {
         {"appsecret", appsecret}
     };
     auto res = client.Post("/oauth2/tokenP", body.dump(), "application/json"); //std::shared_ptr<httplib::Response>
-    
+    std::cout << res->body << std::endl;
     if (res && res->status == 200) {
         json response_json = json::parse(res->body);
         access_token = response_json["access_token"];
-        expires_in = response_json["expires_in"];
+        expires_in = response_json["expires_in"].dump(); //int to string
         access_token_token_expired = response_json["access_token_token_expired"];
 
         //일단은 예외처리 요렇게
@@ -81,7 +81,7 @@ void KInvestmentAPI::request_k_stock(const json& request ,json& response, int me
         headers.emplace(key, value.get<std::string>());
     }
     const std::string query_params = tool::build_query(request["query_params"]);
-    const std::string body = tool::build_query(request["body"]);
+    //const std::string body = tool::build_query(request["body"]);
 
 
     switch(method) {
