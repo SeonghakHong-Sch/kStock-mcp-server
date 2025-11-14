@@ -33,7 +33,7 @@ public:
 
 
     //request 관련
-    void request_k_stock(const json& request ,json& response, int method);
+    void request_k_stock(json& request ,json& response, int method);
 };
 
 
