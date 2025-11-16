@@ -4,10 +4,11 @@ namespace APIRequest {
 
 /*baseRequest-----------------------------------------------------------*/
 //생성,소멸
-baseRequest::baseRequest(std::string request_id, std::string url, std::string api_name):
+baseRequest::baseRequest(std::string request_id, std::string url, std::string api_name, std::string tr_id):
     request_id(request_id),
     url(url),
-    api_name(api_name) {}
+    api_name(api_name),
+    tr_id(tr_id) {}
 baseRequest::~baseRequest(){}
 
 
@@ -25,7 +26,7 @@ std::string baseRequest::getURL() const {
 /*AccountInfoRequest-----------------------------------------------------------*/
 //생성, 소멸
 AccountInfoRequest::AccountInfoRequest(std::string request_id):
-    baseRequest(request_id, "/uapi/domestic-stock/v1/trading/inquire-balance", "주식잔고 조회") {}
+    baseRequest(request_id, "/uapi/domestic-stock/v1/trading/inquire-balance", "주식잔고 조회", "TTTC8434R") {}
 
 AccountInfoRequest::~AccountInfoRequest(){};
 
@@ -33,7 +34,6 @@ AccountInfoRequest::~AccountInfoRequest(){};
 //setRequestInfo 구현
 void AccountInfoRequest::setRequestInfo(const json& request_info) {
     content_type = request_info["content-type"];
-    tr_id =  request_info["tr_id"];
     custtype = request_info["custtype"];
     CANO = request_info["CANO"];
     ACNT_PRDT_CD = request_info["ACNT_PRDT_CD"];
@@ -80,15 +80,13 @@ json AccountInfoRequest::getRequestInfo() {
 /*StockPriceRequest-----------------------------------------------------------*/
 //생성, 소멸
 StockPriceRequest::StockPriceRequest(std::string request_id):
-    baseRequest(request_id, "/uapi/domestic-stock/v1/quotations/inquire-price", "주식현재가 시세 조회") {}
+    baseRequest(request_id, "/uapi/domestic-stock/v1/quotations/inquire-price", "주식현재가 시세 조회", "FHKST01010100") {}
 StockPriceRequest::~StockPriceRequest(){}
 
 //setRequestInfo 구현
 void StockPriceRequest::setRequestInfo(const json& request_info) {
     content_type = request_info["content-type"];
-    tr_id =  request_info["tr_id"];
     custtype = request_info["custtype"];
-    FID_INPUT_ISCD = request_info["FID_INPUT_ISCD"];
     FID_INPUT_ISCD = request_info["FID_INPUT_ISCD"];
 }
 
