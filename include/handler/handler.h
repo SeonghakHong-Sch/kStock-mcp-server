@@ -4,6 +4,7 @@
 #include "httplib.h"
 #include "APIRequest.h"
 #include "APIResponse.h"
+#include "k_investment_api.h"
 
 #include <iostream>
 #include <chrono>

@@ -3,9 +3,11 @@ set(resreq
     resreq/APIRequest.cpp
     resreq/APIResponse.cpp
 )
+set(handler handler/handler.cpp)
 add_library(kstock_lib STATIC
     ${API}
     ${resreq}
+    ${handler}
 )
 
 target_include_directories(kstock_lib PUBLIC
