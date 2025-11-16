@@ -14,8 +14,7 @@ namespace APIResponse {
 class baseResponse {
 
 protected:
-    std::string content_type;
-    std::string rt_cd; //성공 실패 여부, 0이면 성공
+    std::string request_id;
     std::string msg_cd; //응답 코드
     std::string msg1; //메세지 응답내용
 
@@ -24,16 +23,12 @@ protected:
 
 public:
     //생성, 소멸
-    baseResponse();
+    baseResponse(std::string request_id);
     ~baseResponse();
 
     //
     virtual void setResponseInfo(const json& response_info) = 0;
-    virtual json getResponseInfo() = 0; //응답 정보만 반환(부가정보 제외)
-    virtual json toJSON() = 0; //전체 응답 정보 반환(부가정보 포함)
-
-    //응답 성공 여부 반환
-    bool isValidResponse();
+    virtual json getResponseInfo() = 0; //응답 정보 반환
 
     //타임스탬프 반환
     std::time_t getTimestamp() const;
@@ -42,16 +37,15 @@ public:
 class AccountInfoResponse : public baseResponse {
 
 private:
-    std::vector<json> account_list; // 계좌 주식 정보 리스트
-    std::vector<json> balance_list; // 계좌 잔고 정보 리스트
+    std::vector<json> s_balance_list; // 계좌 주식 정보 리스트
+    std::vector<json> a_balance_list; // 계좌 잔고 정보 리스트
 
 public:
-    AccountInfoResponse();
+    AccountInfoResponse(std::string request_id);
     ~AccountInfoResponse();
 
     void setResponseInfo(const json& response_info) override;
     json getResponseInfo() override;
-    json toJSON() override;
     
 
 };

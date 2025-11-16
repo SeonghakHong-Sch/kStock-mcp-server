@@ -21,7 +21,7 @@ protected:
     std::string api_name;
 
     //공통 요청 헤더 정보
-    std::string content_type;
+    std::string content_type = "application/json; charset=utf-8";
     std::string tr_id;
     std::string custtype;
     
