@@ -62,9 +62,15 @@ json AccountInfoRequest::getRequestInfo() {
         {"query_params", {
             {"CANO", CANO},
             {"ACNT_PRDT_CD", ACNT_PRDT_CD},
+            {"AFHR_FLPR_YN", AFHR_FLPR_YN},
+            {"OFL_YN", OFL_YN},
             {"INQR_DVSN", INQR_DVSN},
+            {"UNPR_DVSN", UNPR_DVSN},
             {"FUND_STTL_ICLD_YN", FUND_STTL_ICLD_YN},
-            {"PRCS_DVSN", PRCS_DVSN}
+            {"FNCG_AMT_AUTO_RDPT_YN", FNCG_AMT_AUTO_RDPT_YN},
+            {"PRCS_DVSN", PRCS_DVSN},
+            {"CTX_AREA_FK100", CTX_AREA_FK100},
+            {"CTX_AREA_NK100", CTX_AREA_NK100}
         }}
     };
 }
@@ -73,7 +79,7 @@ json AccountInfoRequest::getRequestInfo() {
 
 /*StockPriceRequest-----------------------------------------------------------*/
 //생성, 소멸
-StockPriceRequest::StockOrderRequest(std::string request_id):
+StockPriceRequest::StockPriceRequest(std::string request_id):
     baseRequest(request_id, "/uapi/domestic-stock/v1/quotations/inquire-price", "주식현재가 시세 조회") {}
 StockPriceRequest::~StockPriceRequest(){}
 
@@ -106,9 +112,9 @@ json StockPriceRequest::getRequestInfo() {
             {"FID_COND_MRKT_DIV_CODE", FID_COND_MRKT_DIV_CODE},
             {"FID_INPUT_ISCD", FID_INPUT_ISCD}
         }
+       }
     };
 }
-
 
 
 } // namespace APIRequest

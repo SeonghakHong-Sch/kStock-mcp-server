@@ -67,9 +67,15 @@ private:
     //요청 필수 파라미터
     std::string CANO; //한투 계좌번호 앞 8자리
     std::string ACNT_PRDT_CD; //계좌 끝 2자리
+    std::string AFHR_FLPR_YN = "N";
+    std::string OFL_YN = "";
     std::string INQR_DVSN;
+    std::string UNPR_DVSN = "01";
     std::string FUND_STTL_ICLD_YN;
+    std::string FNCG_AMT_AUTO_RDPT_YN = "N";
     std::string PRCS_DVSN;
+    std::string CTX_AREA_FK100 = "";
+    std::string CTX_AREA_NK100 = "";
 
 public:
     AccountInfoRequest(std::string request_id);
