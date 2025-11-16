@@ -10,6 +10,7 @@ using json = nlohmann::json;
 
 namespace APIRequest {
 
+//기본
 class baseRequest {
 
 protected:
@@ -37,8 +38,7 @@ public:
 
     //
     virtual void setRequestInfo(const json& request_info) = 0;
-    virtual json getRequestInfo() = 0; //요청 정보만 반환(부가정보 제외)
-    virtual json toJSON() = 0; //전체 요청 정보 반환(부가정보 포함)
+    virtual json getRequestInfo() = 0; //요청객체 모든정보 json 반환
     
     //타임스탬프 반환
     std::time_t getTimestamp() const;
@@ -48,6 +48,7 @@ public:
 };
 
 
+//주식주문(현금) 요청 class
 class StockOrderRequest : public baseRequest {
 
 private:
@@ -59,12 +60,13 @@ public:
 };
 
 
+//주식잔고조회 요청 class
 class AccountInfoRequest : public baseRequest {
 
 private:
     //요청 필수 파라미터
-    std::string CANO;
-    std::string ACNT_PRDT_CD;
+    std::string CANO; //한투 계좌번호 앞 8자리
+    std::string ACNT_PRDT_CD; //계좌 끝 2자리
     std::string INQR_DVSN;
     std::string FUND_STTL_ICLD_YN;
     std::string PRCS_DVSN;
@@ -75,17 +77,24 @@ public:
 
     void setRequestInfo(const json& request_info) override;
     json getRequestInfo() override;
-    json toJSON() override;
-
 
 };
 
+
+//주식현재가 시세 조회 요청 class
 class StockPriceRequest : public baseRequest {
 
+private:
+    std::string FID_COND_MRKT_DIV_CODE; //시장 분류 코드 (J:KRX,)
+    std::string FID_INPUT_ISCD; //종목 코드(005930 삼전 등)
 
 public:
-    StockPriceRequest();
+    StockPriceRequest(std::string request_id);
     ~StockPriceRequest();
+
+    void setRequestInfo(const json& request_info) override;
+    json getRequestInfo() override;
+
 };
 
 
