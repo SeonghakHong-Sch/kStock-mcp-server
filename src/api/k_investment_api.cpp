@@ -89,28 +89,27 @@ void KInvestmentAPI::request_k_stock(json& request ,json& response, int method) 
 
     switch(method) {
         case 0: {
-            std::cout << url + "?" + query_params << std::endl;
             auto res = client.Get(url + "?" + query_params, headers);
-            if (res && res->status == 200) {
-                response = json::parse(res->body);
+            response = json::parse(res->body);
+            if (res && response["rt_cd"] == "0") {
                 std::cout << "GET request " + api_name + " successful" << std::endl;
             } else {
                 std::cout << "GET request " + api_name + " failed" << std::endl;
-                std::cout << res->body << std::endl;
-                std::cout << res->status << std::endl;
+                std::cout << response.dump(4) << std::endl;
             }
             break;
         }
         case 1: {
             const httplib::Params params = {
-            request["body"].begin(), request["body"].end()
+                request["body"].begin(), request["body"].end()
             };
             auto res = client.Post(url, headers, params);
-            if (res && res->status == 200) {
-                response = json::parse(res->body);
+            response = json::parse(res->body);
+            if (res && response["rt_code"] == "0") {
                 std::cout << "POST request" + api_name + " successful" << std::endl;
             } else {
                 std::cout << "POST request" + api_name + " failed" << std::endl;
+                std::cout << response.dump(4) << std::endl;
             }
             break;
         }
