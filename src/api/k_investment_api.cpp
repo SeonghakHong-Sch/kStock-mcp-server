@@ -4,22 +4,40 @@ using json = nlohmann::json;
 
 namespace KInvestmentAPI {
 
-    
+//기본생성자;    
 KInvestmentAPI::KInvestmentAPI() :
     client("https://openapi.koreainvestment.com:9443"),
-    base_url("https://openapi.koreainvestment.com:9443")
-{
+    base_url("https://openapi.koreainvestment.com:9443") {}
 
+KInvestmentAPI::~KInvestmentAPI() {}
+
+
+//singleton pattern
+KInvestmentAPI* KInvestmentAPI::instance = nullptr; //가독성 꼬라지 ㅅㅂ...
+
+//instance 생성 및 return
+KInvestmentAPI* KInvestmentAPI::getInstance() {
+    if (instance == nullptr) {
+        instance = new KInvestmentAPI();
+    }
+    return instance;
 }
 
-KInvestmentAPI::~KInvestmentAPI() {
-
-
+//인스턴스 할당 해제
+void KInvestmentAPI::revokeInstance() {
+    if (instance != nullptr) {
+        delete instance;
+    }
+    instance = nullptr;
+    return;
 }
 
+
+//baseurl 뽑기
 std::string KInvestmentAPI::get_base_url() const {
     return base_url;
 }
+
 
 //한투 api 클라이언트 설정 함수
 void KInvestmentAPI::setClient(json config) {

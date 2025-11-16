@@ -11,9 +11,14 @@ using json = nlohmann::json;
 
 namespace KInvestmentAPI {
 
+//singleton pattern 적용, 객체 하나만 생성 가능하게 ; ;
 class KInvestmentAPI {
 
 private:
+    static KInvestmentAPI* instance; //
+    KInvestmentAPI(); //새로운 객체 생성 금지 위해
+
+
     httplib::Client client;
     std::string base_url;
     std::string appkey, appsecret;
@@ -21,9 +26,15 @@ private:
 
 
 public:
-    KInvestmentAPI();
+    KInvestmentAPI(const KInvestmentAPI&) = delete; //복사생성자, 대입생성자 사용 X
+    KInvestmentAPI& operator=(const KInvestmentAPI&) = delete;
     ~KInvestmentAPI();
 
+    static KInvestmentAPI* getInstance();
+    static void revokeInstance();
+
+
+    //단순 정보 관련
     std::string get_base_url() const;
 
     //연결 관련
