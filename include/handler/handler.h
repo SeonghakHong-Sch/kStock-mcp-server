@@ -19,15 +19,17 @@ using json = nlohmann::json;
 
 namespace handler {
 
-mcp::json setStockConnection_handler(const mcp::json& params, const std::string& /* session_id */);
+mcp::json set_stock_connection_handler(const mcp::json& params, const std::string& /* session_id */);
 
-mcp::json getAccountInfo_handler(const mcp::json& params, const std::string& /* session_id */);
+mcp::json get_accountinfo_handler(const mcp::json& params, const std::string& /* session_id */);
 
 mcp::json getStockPrice_handler(const mcp::json& params, const std::string& /* session_id */);
 
 mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);
 
 mcp::json getOrderDetail_handler(const mcp::json& params, const std::string& /* session_id */);
+
+mcp::json disconnect_stock_handler(const mcp::json& params, const std::string& /* session_id */);
 
 
 } // namespace handler

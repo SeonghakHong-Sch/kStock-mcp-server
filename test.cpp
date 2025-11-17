@@ -29,8 +29,8 @@ int main() {
     
     // Create and configure server
     mcp::server::configuration srv_conf;
-    //srv_conf.host = "localhost"; //linux용
-    srv_conf.host = "0.0.0.0";
+    srv_conf.host = "localhost";
+    //srv_conf.host = "0.0.0.0"; //wsl용
     srv_conf.port = 8888;
     // srv_conf.threadpool_size = 1;
     // srv_conf.ssl.server_cert_path = "./server.cert.pem";
@@ -50,19 +50,22 @@ int main() {
     server.set_capabilities(capabilities);
     
     // Register tools
-    mcp::tool stockConnection_tool = mcp::tool_builder("stockConnection")
+    mcp::tool set_stock_connection_tool = mcp::tool_builder("stockConnection")
         .with_description("set Korean Stock API connection")
         .build();
     
-    mcp::tool accountInfo_tool = mcp::tool_builder("get_AccountInfo")
+    mcp::tool get_accountinfo_tool = mcp::tool_builder("get_AccountInfo")
         .with_description("Get user's account info")
         .build();
     
+    mcp::tool disconnect_stock_tool = mcp::tool_builder("disconnectionStock")
+        .with_description("disconnect Stock")
+        .build();
     
     
-    server.register_tool(stockConnection_tool, handler::setStockConnection_handler);
-    server.register_tool(accountInfo_tool, handler::getAccountInfo_handler);
-    
+    server.register_tool(set_stock_connection_tool, handler::set_stock_connection_handler);
+    server.register_tool(get_accountinfo_tool, handler::get_accountinfo_handler);
+    server.register_tool(disconnect_stock_tool, handler::disconnect_stock_handler);
     
 
 

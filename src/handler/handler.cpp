@@ -6,7 +6,7 @@ using API = KInvestmentAPI::KInvestmentAPI;
 
 namespace handler {
 
-mcp::json setStockConnection_handler(const mcp::json& params, const std::string& /* session_id */) {
+mcp::json set_stock_connection_handler(const mcp::json& params, const std::string& /* session_id */) {
     auto api = API::getInstance();
     json config = {
         {"base_url", "https://openapi.koreainvestment.com:9443"},
@@ -23,10 +23,9 @@ mcp::json setStockConnection_handler(const mcp::json& params, const std::string&
     };
 }
 
-mcp::json getAccountInfo_handler(const mcp::json& params, const std::string& /* session_id */) {
+mcp::json get_accountinfo_handler(const mcp::json& params, const std::string& /* session_id */) {
     
     auto api = API::getInstance();
-    std::cout << params.dump(4) << std::endl;
     const std::string request_id = params["request_id"].is_string()
         ? params["request_id"].get<std::string>()
         : std::to_string(params["request_id"].get<int>());
@@ -51,10 +50,8 @@ mcp::json getAccountInfo_handler(const mcp::json& params, const std::string& /* 
     req = account_request.getRequestInfo();
     
     api->request_k_stock(req, res, 0);
-    std::cout << res.dump(4);
     account_response.setResponseInfo(res);
     
-    std::cout << account_response.getResponseInfo().dump(4) << std::endl;
     return {
         {
             {"type", "text"},
@@ -70,6 +67,18 @@ mcp::json getStockPrice_handler(const mcp::json& params, const std::string& /* s
 mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);
 
 mcp::json getOrderDetail_handler(const mcp::json& params, const std::string& /* session_id */);
+
+mcp::json disconnect_stock_handler(const mcp::json& params, const std::string& /* session_id */) {
+    auto api = API::getInstance();
+    api->revokeAccessToken();
+    API::revokeInstance();
+    return {
+        {
+            {"type", "text"},
+            {"text", "Connection revoked"}
+        }
+    };
+}
 
 
 } //namespace handler
