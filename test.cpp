@@ -61,11 +61,18 @@ int main() {
     mcp::tool disconnect_stock_tool = mcp::tool_builder("disconnectionStock")
         .with_description("disconnect Stock")
         .build();
+
+    mcp::tool get_stockprice_tool = mcp::tool_builder("get_stockprice")
+        .with_description("get stock price")
+        .with_string_param("FID_COND_MRKT_DIV_CODE", "condition market division code")
+        .with_string_param("FID_INPUT_ISCD", "ticker")
+        .build();
     
     
     server.register_tool(set_stock_connection_tool, handler::set_stock_connection_handler);
     server.register_tool(get_accountinfo_tool, handler::get_accountinfo_handler);
     server.register_tool(disconnect_stock_tool, handler::disconnect_stock_handler);
+    server.register_tool(get_stockprice_tool, handler::get_stockprice_handler);
     
 
 

@@ -34,6 +34,7 @@ public:
     std::time_t getTimestamp() const;
 };
 
+
 class AccountInfoResponse : public baseResponse {
 
 private:
@@ -47,6 +48,21 @@ public:
     void setResponseInfo(const json& response_info) override;
     json getResponseInfo() override;
     
+
+};
+
+
+class StockPriceResponse : public baseResponse {
+
+private:
+    std::vector<json> data_list;
+
+public:
+    StockPriceResponse(std::string request_id);
+    ~StockPriceResponse();
+
+    void setResponseInfo(const json& response_info) override;
+    json getResponseInfo() override;
 
 };
 

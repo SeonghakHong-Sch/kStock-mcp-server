@@ -26,10 +26,11 @@ mcp::json set_stock_connection_handler(const mcp::json& params, const std::strin
 mcp::json get_accountinfo_handler(const mcp::json& params, const std::string& /* session_id */) {
     
     auto api = API::getInstance();
+    
     const std::string request_id = params["request_id"].is_string()
         ? params["request_id"].get<std::string>()
         : std::to_string(params["request_id"].get<int>());
-    std::cout << request_id << std::endl;
+    
     APIRequest::AccountInfoRequest account_request(request_id);
     APIResponse::AccountInfoResponse account_response(request_id);
 
@@ -62,7 +63,39 @@ mcp::json get_accountinfo_handler(const mcp::json& params, const std::string& /*
 
 }
 
-mcp::json getStockPrice_handler(const mcp::json& params, const std::string& /* session_id */);
+mcp::json get_stockprice_handler(const mcp::json& params, const std::string& /* session_id */) {
+    auto api = API::getInstance();
+
+    const std::string request_id = params["request_id"].is_string()
+        ? params["request_id"].get<std::string>()
+        : std::to_string(params["request_id"].get<int>());
+    
+    APIRequest::StockPriceRequest stockprice_request(request_id);
+    APIResponse::StockPriceResponse stockprice_response(request_id);
+
+    stockprice_request.setRequestInfo(
+        {
+            {"content-type", "application/json; charset=utf-8"},
+            {"custtype", "P"},
+            {"FID_COND_MRKT_DIV_CODE", params["FID_COND_MRKT_DIV_CODE"]},
+            {"FID_INPUT_ISCD", params["FID_INPUT_ISCD"]}
+        }
+    );
+
+    json req, res;
+    req = stockprice_request.getRequestInfo();
+
+    api->request_k_stock(req, res, 0);
+    stockprice_response.setResponseInfo(res);
+
+    return {
+        {
+            {"type", "text"},
+            {"text", res.dump()}
+        }
+    };
+
+}
 
 mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);
 

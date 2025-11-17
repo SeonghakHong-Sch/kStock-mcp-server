@@ -91,7 +91,7 @@ public:
 class StockPriceRequest : public baseRequest {
 
 private:
-    std::string FID_COND_MRKT_DIV_CODE = "J"; //시장 분류 코드 (J:KRX,)
+    std::string FID_COND_MRKT_DIV_CODE; //시장 분류 코드 (J:KRX,)
     std::string FID_INPUT_ISCD; //종목 코드(005930 삼전 등)
 
 public:
