@@ -40,6 +40,7 @@ if(MCP_SSL)
 endif()
 
 add_subdirectory(src)
+add_subdirectory(test)
 
 
 # build

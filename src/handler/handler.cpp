@@ -86,8 +86,9 @@ mcp::json get_stockprice_handler(const mcp::json& params, const std::string& /* 
     req = stockprice_request.getRequestInfo();
 
     api->request_k_stock(req, res, 0);
+    std::cout << res.dump(4) << std::endl;
     stockprice_response.setResponseInfo(res);
-
+    std::cout << stockprice_response.getResponseInfo().dump(4) << std::endl;
     return {
         {
             {"type", "text"},
