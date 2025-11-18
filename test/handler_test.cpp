@@ -49,7 +49,7 @@ int main() {
             std::cout << "Parameters Schema: " << tool.parameters_schema.dump(2) << std::endl;
         }
 
-        // Test kStock-mcp tools
+        // 1. Test kStock-mcp tools
         std::cout << "\n=== Testing stockConnection ===" << std::endl;
         try {
             mcp::json account_result = client.call_tool("set_stockConnection");
@@ -60,7 +60,7 @@ int main() {
 
 
 
-        // 1. Call get_AccountInfo (계정 정보 조회 - 파라미터 없을 가능성 높음)
+        // 2. Call get_AccountInfo (계정 정보 조회 - 파라미터 없을 가능성 높음)
         std::cout << "\n=== Testing get_AccountInfo ===" << std::endl;
         try {
             mcp::json account_params = {
@@ -72,11 +72,13 @@ int main() {
             std::cerr << "Error: " << e.what() << std::endl;
         }
 
-        // 2. Call get_stockprice (주식 가격 조회)
+        // 3. Call get_stockprice (주식 가격 조회)
         std::cout << "\n=== Testing get_stockprice ===" << std::endl;
         try {
             mcp::json price_params = {
-                {"code", "005930"}  // 삼성전자 예시
+                {"request_id", "test"},
+                {"FID_COND_MRKT_DIV_CODE", "J"},
+                {"FID_INPUT_ISCD", "005930"}  // 삼성전자 예시
             };
             mcp::json price_result = client.call_tool("get_stockprice", price_params);
             std::cout << "Stock Price: " << price_result.dump(2) << std::endl;
