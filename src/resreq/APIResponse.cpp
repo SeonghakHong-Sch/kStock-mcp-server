@@ -50,7 +50,7 @@ StockPriceResponse::~StockPriceResponse() {}
 void StockPriceResponse::setResponseInfo(const json& response_info) {
     msg_cd = response_info["msg_cd"];
     msg1 = response_info["msg1"];
-    data_list = response_info["output"];
+    data_obj = response_info["output"];
 }
 
 
@@ -60,7 +60,7 @@ json StockPriceResponse::getResponseInfo() {
             {"request_id", request_id},
             {"time", timestamp},
         },
-        "data", data_list
+        "data", data_obj
     };
 }
 

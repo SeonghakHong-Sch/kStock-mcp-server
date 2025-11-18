@@ -55,7 +55,7 @@ public:
 class StockPriceResponse : public baseResponse {
 
 private:
-    std::vector<json> data_list;
+    json data_obj;
 
 public:
     StockPriceResponse(std::string request_id);

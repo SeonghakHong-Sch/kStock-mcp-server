@@ -1,5 +1,6 @@
 #include "handler.h"
 
+#include <typeinfo>
 
 using json = nlohmann::json;
 using API = KInvestmentAPI::KInvestmentAPI;
@@ -52,7 +53,7 @@ mcp::json get_accountinfo_handler(const mcp::json& params, const std::string& /*
     
     api->request_k_stock(req, res, 0);
     account_response.setResponseInfo(res);
-    
+    std::cout << typeid(res).name() << std::endl;
     return {
         {
             {"type", "text"},
@@ -66,10 +67,11 @@ mcp::json get_accountinfo_handler(const mcp::json& params, const std::string& /*
 mcp::json get_stockprice_handler(const mcp::json& params, const std::string& /* session_id */) {
     auto api = API::getInstance();
 
+    std::cout << params.dump(4) << std::endl;
     const std::string request_id = params["request_id"].is_string()
         ? params["request_id"].get<std::string>()
         : std::to_string(params["request_id"].get<int>());
-    
+    std::cout << request_id << std::endl;
     APIRequest::StockPriceRequest stockprice_request(request_id);
     APIResponse::StockPriceResponse stockprice_response(request_id);
 
@@ -85,17 +87,23 @@ mcp::json get_stockprice_handler(const mcp::json& params, const std::string& /* 
     json req, res;
     req = stockprice_request.getRequestInfo();
 
+    std::cout << "Before request_k_stock" << std::endl;
     api->request_k_stock(req, res, 0);
-    std::cout << res.dump(4) << std::endl;
+    std::cout << "After request_k_stock, res type: " << res.type_name() << std::endl;
+    std::cout << "res is_null: " << res.is_null() << ", is_object: " << res.is_object() << std::endl;
+
+    if (!res.is_null()) {
+        std::cout << "res dump: " << res.dump(4) << std::endl;
+    }
+
     stockprice_response.setResponseInfo(res);
-    std::cout << stockprice_response.getResponseInfo().dump(4) << std::endl;
-    return {
+    std::cout << "resobj: " << stockprice_response.getResponseInfo().dump(4) << std::endl;
+    return json::array({ 
         {
             {"type", "text"},
             {"text", res.dump()}
         }
-    };
-
+    });
 }
 
 mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);
