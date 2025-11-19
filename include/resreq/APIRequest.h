@@ -48,18 +48,6 @@ public:
 };
 
 
-//주식주문(현금) 요청 class
-class StockOrderRequest : public baseRequest {
-
-private:
-
-public:
-    StockOrderRequest();
-    ~StockOrderRequest();
-
-};
-
-
 //주식잔고조회 요청 class
 class AccountInfoRequest : public baseRequest {
 
@@ -120,5 +108,20 @@ public:
     json getRequestInfo() override;
 };
 
+
+//주식 기본조회 요청 class
+class StockInfoRequest: public baseRequest {
+
+private:
+    std::string PRDT_TYPE_CD = "300"; //주식, ETF, ETN, ELW
+    std::string PDNO; //종목번호(6자리)
+
+public:
+    StockInfoRequest(std::string request_id);
+    ~StockInfoRequest();
+
+    void setRequestInfo(const json& request_info) override;
+    json getRequestInfo() override;
+};
 
 } // namespace APIRequest

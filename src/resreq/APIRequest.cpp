@@ -94,7 +94,6 @@ void StockPriceRequest::setRequestInfo(const json& request_info) {
 //getRequestInfo 구현
 json StockPriceRequest::getRequestInfo() {
     return {
-
         {"etc", {
             {"request_id", request_id},
             {"url", url},
@@ -148,6 +147,41 @@ json FinRatioRequest::getRequestInfo() {
             {"FID_DIV_CLS_CODE", FID_DIV_CLS_CODE},
             {"fid_cond_mrkt_div_code", fid_cond_mrkt_div_code},
             {"fid_input_iscd", fid_input_iscd}
+        }}
+    };
+}
+
+
+/*StockInfoRequest-----------------------------------------------------------*/
+//생성, 소멸
+StockInfoRequest::StockInfoRequest(std::string request_id):
+    baseRequest(request_id, "/uapi/domestic-stock/v1/quotations/search-stock-info", "주식 기본조회", "CTPF1002R") {}
+StockInfoRequest::~StockInfoRequest(){}
+
+//setRequestInfo 구현
+void StockInfoRequest::setRequestInfo(const json& request_info) {
+    content_type = request_info["content-type"];
+    custtype = request_info["custtype"];
+    PDNO = request_info["PDNO"];
+}
+
+//getRequestInfo 구현
+json StockInfoRequest::getRequestInfo() {
+    return {
+        {"etc", {
+            {"request_id", request_id},
+            {"url", url},
+            {"time", timestamp},
+            {"api_name", api_name}
+        }},
+        {"headers", {
+            {"content-type", content_type},
+            {"tr_id", tr_id},
+            {"custtype", custtype}
+        }},
+        {"query_params", {
+            {"PRDT_TYPE_CD", PRDT_TYPE_CD},
+            {"PDNO", PDNO}
         }}
     };
 }

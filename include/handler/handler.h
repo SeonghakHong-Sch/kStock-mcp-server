@@ -25,7 +25,9 @@ mcp::json get_accountinfo_handler(const mcp::json& params, const std::string& /*
 
 mcp::json get_stockprice_handler(const mcp::json& params, const std::string& /* session_id */);
 
-mcp::json get_financial_ratio(const mcp::json& params, const std::string& /* session_id */);
+mcp::json get_financial_ratio_handler(const mcp::json& params, const std::string& /* session_id */);
+
+mcp::json get_stock_info_handler(const mcp::json& params, const std::string& /* session_id */);
 
 mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);
 

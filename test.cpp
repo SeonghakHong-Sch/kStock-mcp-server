@@ -74,13 +74,19 @@ int main() {
         .with_string_param("fid_cond_mrkt_div_code", "market division code: J")
         .with_string_param("fid_input_iscd", "ticker")
         .build();
+
+    mcp::tool get_stock_info_tool = mcp::tool_builder("get_stock_info")
+        .with_description("get korean stock info")
+        .with_string_param("PDNO", "ticker, if ETN, start with Q(EX. Q500001)")
+        .build();
     
     
     server.register_tool(set_stock_connection_tool, handler::set_stock_connection_handler);
     server.register_tool(get_accountinfo_tool, handler::get_accountinfo_handler);
     server.register_tool(disconnect_stock_tool, handler::disconnect_stock_handler);
     server.register_tool(get_stockprice_tool, handler::get_stockprice_handler);
-    server.register_tool(get_finratio_tool, handler::get_financial_ratio);
+    server.register_tool(get_finratio_tool, handler::get_financial_ratio_handler);
+    server.register_tool(get_stock_info_tool, handler::get_stock_info_handler);
     
 
 

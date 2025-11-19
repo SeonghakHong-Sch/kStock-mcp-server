@@ -101,6 +101,19 @@ int main() {
             std::cerr << "Error: " << e.what() << std::endl;
         }
 
+        // 5. Test get_stock_info (주식 기본정보 조회)
+        std::cout << "\n=== Testing get_stock_info ===" << std::endl;
+        try {
+            mcp::json stockinfo_params = {
+                {"request_id", "test"},
+                {"PDNO", "000660"},
+            };
+            mcp::json stockinfo_result = client.call_tool("get_stock_info", stockinfo_params);
+            std::cout << "Fin Ratio: " << stockinfo_result.dump(2) << std::endl;
+        } catch (const mcp::mcp_exception& e){
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+        
         // 0. Test ~~
 
 

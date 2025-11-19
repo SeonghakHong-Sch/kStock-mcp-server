@@ -83,4 +83,19 @@ public:
     json getResponseInfo() override;
 };
 
+
+//주식 기본조회 응답 class
+class StockInfoResponse : public baseResponse {
+
+private: 
+    json data_obj;
+
+public:
+    StockInfoResponse(std::string request_id);
+    ~StockInfoResponse();
+
+    void setResponseInfo(const json& response_info) override;
+    json getResponseInfo() override;
+};
+
 } // namespace APIResponse
