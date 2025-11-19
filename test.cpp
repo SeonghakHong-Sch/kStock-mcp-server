@@ -50,22 +50,29 @@ int main() {
     server.set_capabilities(capabilities);
     
     // Register tools
-    mcp::tool set_stock_connection_tool = mcp::tool_builder("set_stockConnection")
+    mcp::tool set_stock_connection_tool = mcp::tool_builder("set_connection_stock")
         .with_description("set Korean Stock API connection. This tool most be excuted as first")
         .build();
     
-    mcp::tool get_accountinfo_tool = mcp::tool_builder("get_AccountInfo")
+    mcp::tool get_accountinfo_tool = mcp::tool_builder("get_account_info")
         .with_description("Get user's account info")
         .build();
     
-    mcp::tool disconnect_stock_tool = mcp::tool_builder("set_disconnectionStock")
+    mcp::tool disconnect_stock_tool = mcp::tool_builder("set_disconnection_stock")
         .with_description("disconnect Stock")
         .build();
 
-    mcp::tool get_stockprice_tool = mcp::tool_builder("get_stockprice")
+    mcp::tool get_stockprice_tool = mcp::tool_builder("get_stock_price")
         .with_description("get stock price")
         .with_string_param("FID_COND_MRKT_DIV_CODE", "condition market division code")
         .with_string_param("FID_INPUT_ISCD", "ticker")
+        .build();
+
+    mcp::tool get_finratio_tool = mcp::tool_builder("get_financial_ratio")
+        .with_description("get korean stockmarket financial ratio")
+        .with_string_param("FID_DIV_CLS_CODE", "0: year, 1: quarter")
+        .with_string_param("fid_cond_mrkt_div_code", "market division code: J")
+        .with_string_param("fid_input_iscd", "ticker")
         .build();
     
     
@@ -73,6 +80,7 @@ int main() {
     server.register_tool(get_accountinfo_tool, handler::get_accountinfo_handler);
     server.register_tool(disconnect_stock_tool, handler::disconnect_stock_handler);
     server.register_tool(get_stockprice_tool, handler::get_stockprice_handler);
+    server.register_tool(get_finratio_tool, handler::get_financial_ratio);
     
 
 

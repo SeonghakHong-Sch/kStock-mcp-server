@@ -104,12 +104,21 @@ public:
 };
 
 
-class OrderDetailRequest : public baseRequest {
+//재무비율 요청 class
+class FinRatioRequest : public baseRequest {
 
+private:
+    std::string FID_DIV_CLS_CODE;
+    std::string fid_cond_mrkt_div_code;
+    std::string fid_input_iscd;
 
 public:
-    OrderDetailRequest();
-    ~OrderDetailRequest();
+    FinRatioRequest(std::string request_id);
+    ~FinRatioRequest();
+
+    void setRequestInfo(const json& request_info) override;
+    json getRequestInfo() override;
 };
+
 
 } // namespace APIRequest

@@ -67,11 +67,10 @@ mcp::json get_accountinfo_handler(const mcp::json& params, const std::string& /*
 mcp::json get_stockprice_handler(const mcp::json& params, const std::string& /* session_id */) {
     auto api = API::getInstance();
 
-    std::cout << params.dump(4) << std::endl;
     const std::string request_id = params["request_id"].is_string()
         ? params["request_id"].get<std::string>()
         : std::to_string(params["request_id"].get<int>());
-    std::cout << request_id << std::endl;
+    
     APIRequest::StockPriceRequest stockprice_request(request_id);
     APIResponse::StockPriceResponse stockprice_response(request_id);
 
@@ -87,28 +86,56 @@ mcp::json get_stockprice_handler(const mcp::json& params, const std::string& /* 
     json req, res;
     req = stockprice_request.getRequestInfo();
 
-    std::cout << "Before request_k_stock" << std::endl;
     api->request_k_stock(req, res, 0);
-    std::cout << "After request_k_stock, res type: " << res.type_name() << std::endl;
-    std::cout << "res is_null: " << res.is_null() << ", is_object: " << res.is_object() << std::endl;
-
-    if (!res.is_null()) {
-        std::cout << "res dump: " << res.dump(4) << std::endl;
-    }
 
     stockprice_response.setResponseInfo(res);
-    std::cout << "resobj: " << stockprice_response.getResponseInfo().dump(4) << std::endl;
-    return json::array({ 
+    
+    return { 
         {
             {"type", "text"},
             {"text", res.dump()}
         }
-    });
+    };
 }
 
-mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);
 
-mcp::json getOrderDetail_handler(const mcp::json& params, const std::string& /* session_id */);
+mcp::json get_financial_ratio(const mcp::json& params, const std::string& /* session_id */) {
+    auto api = API::getInstance();
+
+    const std::string request_id = params["request_id"].is_string()
+        ? params["request_id"].get<std::string>()
+        : std::to_string(params["request_id"].get<int>());
+
+    APIRequest::FinRatioRequest stockprice_request(request_id);
+    APIResponse::FinRatioResponse stockprice_response(request_id);
+
+    stockprice_request.setRequestInfo(
+        {
+            {"content-type", "application/json; charset=utf-8"},
+            {"custtype", "P"},
+            {"FID_DIV_CLS_CODE", params["FID_DIV_CLS_CODE"]},
+            {"fid_cond_mrkt_div_code", params["fid_cond_mrkt_div_code"]},
+            {"fid_input_iscd", params["fid_input_iscd"]}
+        }
+    );
+
+    json req, res;
+    req = stockprice_request.getRequestInfo();
+
+    api->request_k_stock(req, res, 0);
+
+    stockprice_response.setResponseInfo(res);
+
+    return {
+        {
+            {"type", "text"},
+            {"text", res.dump()}
+        }
+    };
+}
+
+
+mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);
 
 mcp::json disconnect_stock_handler(const mcp::json& params, const std::string& /* session_id */) {
     auto api = API::getInstance();

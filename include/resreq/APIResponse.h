@@ -35,6 +35,7 @@ public:
 };
 
 
+//주식 계좌정보 response class
 class AccountInfoResponse : public baseResponse {
 
 private:
@@ -52,6 +53,7 @@ public:
 };
 
 
+//주식 현재가 정보 response class
 class StockPriceResponse : public baseResponse {
 
 private:
@@ -66,5 +68,19 @@ public:
 
 };
 
+
+//재무비율  response class
+class FinRatioResponse : public baseResponse {
+
+private:
+    json data_obj;
+
+public: 
+    FinRatioResponse(std::string request_id);
+    ~FinRatioResponse();
+
+    void setResponseInfo(const json& response_info) override;
+    json getResponseInfo() override;
+};
 
 } // namespace APIResponse

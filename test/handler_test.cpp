@@ -50,9 +50,9 @@ int main() {
         }
 
         // 1. Test kStock-mcp tools
-        std::cout << "\n=== Testing stockConnection ===" << std::endl;
+        std::cout << "\n=== Testing set_connection_stock ===" << std::endl;
         try {
-            mcp::json account_result = client.call_tool("set_stockConnection");
+            mcp::json account_result = client.call_tool("set_connection_stock");
             std::cout << "Success StockConnection" << std::endl;
         } catch (const mcp::mcp_exception& e) {
             std::cerr << "Error: " << e.what() << std::endl;
@@ -60,31 +60,50 @@ int main() {
 
 
 
-        // 2. Call get_AccountInfo (계정 정보 조회 - 파라미터 없을 가능성 높음)
-        std::cout << "\n=== Testing get_AccountInfo ===" << std::endl;
+        // 2. Test get_AccountInfo (계정 정보 조회 - 파라미터 없을 가능성 높음)
+        std::cout << "\n=== Testing get_account_info ===" << std::endl;
         try {
             mcp::json account_params = {
                 {"request_id", "1"}
             };
-            mcp::json account_result = client.call_tool("get_AccountInfo", account_params);
+            mcp::json account_result = client.call_tool("get_account_info", account_params);
             std::cout << "Account Info: " << account_result.dump(2) << std::endl;
         } catch (const mcp::mcp_exception& e) {
             std::cerr << "Error: " << e.what() << std::endl;
         }
 
-        // 3. Call get_stockprice (주식 가격 조회)
-        std::cout << "\n=== Testing get_stockprice ===" << std::endl;
+        // 3. Test get_stockprice (주식 가격 조회)
+        std::cout << "\n=== Testing get_stock_price ===" << std::endl;
         try {
             mcp::json price_params = {
                 {"request_id", "test"},
                 {"FID_COND_MRKT_DIV_CODE", "J"},
                 {"FID_INPUT_ISCD", "005930"}  // 삼성전자 예시
             };
-            mcp::json price_result = client.call_tool("get_stockprice", price_params);
+            mcp::json price_result = client.call_tool("get_stock_price", price_params);
             std::cout << "Stock Price: " << price_result.dump(2) << std::endl;
         } catch (const mcp::mcp_exception& e) {
             std::cerr << "Error: " << e.what() << std::endl;
         }
+
+        // 4. Test get_financial_ratio (주식 재무비율 조회)
+        std::cout << "\n=== Testing get_financial_ratio ===" << std::endl;
+        try {
+            mcp::json finratio_params = {
+                {"request_id", "test"},
+                {"FID_DIV_CLS_CODE", "0"},
+                {"fid_cond_mrkt_div_code", "J"},
+                {"fid_input_iscd", "000660"}
+            };
+            mcp::json finratio_result = client.call_tool("get_financial_ratio", finratio_params);
+            std::cout << "Fin Ratio: " << finratio_result.dump(2) << std::endl;
+        } catch (const mcp::mcp_exception& e){
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+
+        // 0. Test ~~
+
+
     } catch (const mcp::mcp_exception& e) { 
         std::cerr << "MCP error: " << e.what() << " (code: " << static_cast<int>(e.code()) << ")" << std::endl;
         return 1;

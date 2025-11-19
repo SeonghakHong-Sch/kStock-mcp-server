@@ -94,7 +94,7 @@ void StockPriceRequest::setRequestInfo(const json& request_info) {
 //getRequestInfo 구현
 json StockPriceRequest::getRequestInfo() {
     return {
-        
+
         {"etc", {
             {"request_id", request_id},
             {"url", url},
@@ -111,6 +111,44 @@ json StockPriceRequest::getRequestInfo() {
             {"FID_INPUT_ISCD", FID_INPUT_ISCD}
         }
        }
+    };
+}
+
+
+/*FinRatioRequest-----------------------------------------------------------*/
+//생성, 소멸
+FinRatioRequest::FinRatioRequest(std::string request_id):
+    baseRequest(request_id, "/uapi/domestic-stock/v1/finance/financial-ratio", "재무비율 조회", "FHKST66430300") {}
+FinRatioRequest::~FinRatioRequest(){}
+
+//setRequestInfo 구현
+void FinRatioRequest::setRequestInfo(const json& request_info) {
+    content_type = request_info["content-type"];
+    custtype = request_info["custtype"];
+    FID_DIV_CLS_CODE = request_info["FID_DIV_CLS_CODE"];
+    fid_cond_mrkt_div_code = request_info["fid_cond_mrkt_div_code"];
+    fid_input_iscd = request_info["fid_input_iscd"];
+}
+
+//getRequestInfo 구현
+json FinRatioRequest::getRequestInfo() {
+    return {
+        {"etc", {
+            {"request_id", request_id},
+            {"url", url},
+            {"time", timestamp},
+            {"api_name", api_name}
+        }},
+        {"headers", {
+            {"content-type", content_type},
+            {"tr_id", tr_id},
+            {"custtype", custtype}
+        }},
+        {"query_params", {
+            {"FID_DIV_CLS_CODE", FID_DIV_CLS_CODE},
+            {"fid_cond_mrkt_div_code", fid_cond_mrkt_div_code},
+            {"fid_input_iscd", fid_input_iscd}
+        }}
     };
 }
 
