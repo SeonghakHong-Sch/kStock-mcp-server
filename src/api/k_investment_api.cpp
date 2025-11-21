@@ -4,22 +4,40 @@ using json = nlohmann::json;
 
 namespace KInvestmentAPI {
 
-    
+//기본생성자;    
 KInvestmentAPI::KInvestmentAPI() :
     client("https://openapi.koreainvestment.com:9443"),
-    base_url("https://openapi.koreainvestment.com:9443")
-{
+    base_url("https://openapi.koreainvestment.com:9443") {}
 
+KInvestmentAPI::~KInvestmentAPI() {}
+
+
+//singleton pattern
+KInvestmentAPI* KInvestmentAPI::instance = nullptr; //가독성 꼬라지 ㅅㅂ...
+
+//instance 생성 및 return
+KInvestmentAPI* KInvestmentAPI::getInstance() {
+    if (instance == nullptr) {
+        instance = new KInvestmentAPI();
+    }
+    return instance;
 }
 
-KInvestmentAPI::~KInvestmentAPI() {
-
-
+//인스턴스 할당 해제
+void KInvestmentAPI::revokeInstance() {
+    if (instance != nullptr) {
+        delete instance;
+    }
+    instance = nullptr;
+    return;
 }
 
+
+//baseurl 뽑기
 std::string KInvestmentAPI::get_base_url() const {
     return base_url;
 }
+
 
 //한투 api 클라이언트 설정 함수
 void KInvestmentAPI::setClient(json config) {
@@ -40,7 +58,8 @@ void KInvestmentAPI::setAccessToken() {
     std::cout << res->body << std::endl;
     if (res && res->status == 200) {
         json response_json = json::parse(res->body);
-        access_token = response_json["access_token"];
+        access_token = "Bearer " + response_json["access_token"].get<std::string>();
+        std::cout << access_token << std::endl;
         expires_in = response_json["expires_in"].dump(); //int to string
         access_token_token_expired = response_json["access_token_token_expired"];
 
@@ -66,7 +85,7 @@ void KInvestmentAPI::revokeAccessToken() {
     }
 }
 
-void KInvestmentAPI::request_k_stock(const json& request ,json& response, int method) {
+void KInvestmentAPI::request_k_stock(json& request ,json& response, int method) {
 
     const std::string url = request["etc"]["url"];
     const std::string api_name = request["etc"]["api_name"];
@@ -76,6 +95,9 @@ void KInvestmentAPI::request_k_stock(const json& request ,json& response, int me
     //     {"appkey", appkey},
     //     {"appsecret", appsecret}
     // };
+    request["headers"]["authorization"] = access_token;
+    request["headers"]["appkey"] = appkey;
+    request["headers"]["appsecret"] = appsecret;
     httplib::Headers headers;
     for (auto& [key, value] : request["headers"].items()) {
         headers.emplace(key, value.get<std::string>());
@@ -85,28 +107,29 @@ void KInvestmentAPI::request_k_stock(const json& request ,json& response, int me
 
     switch(method) {
         case 0: {
-            std::cout << url + "?" + query_params << std::endl;
             auto res = client.Get(url + "?" + query_params, headers);
-            if (res && res->status == 200) {
-                response = json::parse(res->body);
+            response = json::parse(res->body);
+            if (res && response["rt_cd"] == "0") {
                 std::cout << "GET request " + api_name + " successful" << std::endl;
             } else {
                 std::cout << "GET request " + api_name + " failed" << std::endl;
-                std::cout << res->body << std::endl;
-                std::cout << res->status << std::endl;
+                std::cout << response.dump(4) << std::endl;
             }
+            break;
         }
         case 1: {
             const httplib::Params params = {
-            request["body"].begin(), request["body"].end()
+                request["body"].begin(), request["body"].end()
             };
-            auto res = client.Post(url, headers, params)
-            if (res && res->status == 200) {
-                response = json::parse(res->body);
-                std::cout << "POST request" + request["etc"]["api_name"] + " successful" << std::endl;
+            auto res = client.Post(url, headers, params);
+            response = json::parse(res->body);
+            if (res && response["rt_code"] == "0") {
+                std::cout << "POST request" + api_name + " successful" << std::endl;
             } else {
-                std::cout << "POST request" + request["etc"]["api_name"] + " failed" << std::endl;
+                std::cout << "POST request" + api_name + " failed" << std::endl;
+                std::cout << response.dump(4) << std::endl;
             }
+            break;
         }
         default:
             std::cerr << "Invalid method" << std::endl;

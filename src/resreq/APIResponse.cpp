@@ -4,13 +4,10 @@ namespace APIResponse {
 
 /*baseResponse-----------------------------------------------------------*/
 //생성, 소멸
-baseResponse::baseResponse(){};
-baseResponse::~baseResponse(){};
+baseResponse::baseResponse(std::string request_id):
+    request_id(request_id) {}
+baseResponse::~baseResponse(){}
 
-//응답 성공 여부 반환
-bool baseResponse::isValidResponse() {
-    return rt_cd == "0";
-}
 
 //타임스탬프 반환
 std::time_t baseResponse::getTimestamp() const {
@@ -19,35 +16,101 @@ std::time_t baseResponse::getTimestamp() const {
 
 
 /*AccountInfoResponse-----------------------------------------------------------*/
+AccountInfoResponse::AccountInfoResponse(std::string request_id):
+    baseResponse(request_id) {}
+AccountInfoResponse::~AccountInfoResponse() {}
+
 void AccountInfoResponse::setResponseInfo(const json& response_info) {
-    content_type = response_info["content-type"];
-    rt_cd = response_info["rt_cd"];
     msg_cd = response_info["msg_cd"];
     msg1 = response_info["msg1"];
-    //account_list = response_info["account_list"];
-    //balance_list = response_info["balance_list"];
-    //추후 구현
+    s_balance_list = response_info["output1"];
+    a_balance_list = response_info["output2"];
 }
 
 json AccountInfoResponse::getResponseInfo() {
     return {
-        {"account_list", account_list},
-        {"balance_list", balance_list}
+        "etc", {
+            {"request_id", request_id},
+            {"time", timestamp},
+        },
+        "data", {
+            {"s_balance_list", s_balance_list},
+            {"a_balance_list", a_balance_list}
+        }
     };
 }
 
-json AccountInfoResponse::toJSON() {
+
+/*StockPriceResponse-----------------------------------------------------------*/
+StockPriceResponse::StockPriceResponse(std::string request_id):
+    baseResponse(request_id) {}
+StockPriceResponse::~StockPriceResponse() {}
+
+
+void StockPriceResponse::setResponseInfo(const json& response_info) {
+    msg_cd = response_info["msg_cd"];
+    msg1 = response_info["msg1"];
+    data_obj = response_info["output"];
+}
+
+
+json StockPriceResponse::getResponseInfo() {
     return {
-        {"content-type", content_type},
-        {"rt_cd", rt_cd},
-        {"msg_cd", msg_cd},
-        {"msg1", msg1},
-        {"account_list", account_list},
-        {"balance_list", balance_list},
-        {"timestamp", timestamp}
+        "etc", {
+            {"request_id", request_id},
+            {"time", timestamp},
+        },
+        "data", data_obj
     };
 }
 
+
+/*FinRatioResponse-----------------------------------------------------------*/
+FinRatioResponse::FinRatioResponse(std::string request_id):
+    baseResponse(request_id) {}
+FinRatioResponse::~FinRatioResponse() {}
+
+
+void FinRatioResponse::setResponseInfo(const json& response_info) {
+    msg_cd = response_info["msg_cd"];
+    msg1 = response_info["msg1"];
+    data_obj = response_info["output"];
+}
+
+
+json FinRatioResponse::getResponseInfo() {
+    return {
+        "etc", {
+            {"request_id", request_id},
+            {"time", timestamp},
+        },
+        "data", data_obj
+    };
+}
+
+
+/*StockInfoResponse-----------------------------------------------------------*/
+StockInfoResponse::StockInfoResponse(std::string request_id):
+    baseResponse(request_id) {}
+StockInfoResponse::~StockInfoResponse() {}
+
+
+void StockInfoResponse::setResponseInfo(const json& response_info) {
+    msg_cd = response_info["msg_cd"];
+    msg1 = response_info["msg1"];
+    data_obj = response_info["output"];
+}
+
+
+json StockInfoResponse::getResponseInfo() {
+    return {
+        "etc", {
+            {"request_id", request_id},
+            {"time", timestamp},
+        },
+        "data", data_obj
+    };
+}
 
 
 } // namespace APIResponse

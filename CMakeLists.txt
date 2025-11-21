@@ -9,6 +9,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Threads REQUIRED)
 
+#전처리기 추가(stock codes)
+add_definitions(-DDATA_DIR="${CMAKE_SOURCE_DIR}/data")
+
 #ssl 옵션 켜져있는지 검사
 if(MCP_SSL)
     find_package(OpenSSL 3.0.0 COMPONENTS Crypto SSL REQUIRED)
@@ -40,6 +43,7 @@ if(MCP_SSL)
 endif()
 
 add_subdirectory(src)
+add_subdirectory(test)
 
 
 # build
