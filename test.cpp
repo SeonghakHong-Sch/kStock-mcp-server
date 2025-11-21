@@ -19,6 +19,10 @@
 #include <json.hpp>
 #include <cstdlib>
 
+#ifndef DATA_DIR
+#define DATA_DIR "./data"
+#endif
+
 using json = nlohmann::json;
 using API = KInvestmentAPI::KInvestmentAPI;
 
@@ -45,7 +49,8 @@ int main() {
     //     {"resources", {{"subscribe", false}, {"listChanged", true}}}
     // };
     mcp::json capabilities = {
-        {"tools", mcp::json::object()}
+        {"tools", mcp::json::object()},
+        {"resources", {{"subscribe", false}, {"listChanged", true}}}
     };
     server.set_capabilities(capabilities);
     
@@ -79,6 +84,7 @@ int main() {
         .with_description("get korean stock info")
         .with_string_param("PDNO", "ticker, if ETN, start with Q(EX. Q500001)")
         .build();
+
     
     
     server.register_tool(set_stock_connection_tool, handler::set_stock_connection_handler);
@@ -87,8 +93,14 @@ int main() {
     server.register_tool(get_stockprice_tool, handler::get_stockprice_handler);
     server.register_tool(get_finratio_tool, handler::get_financial_ratio_handler);
     server.register_tool(get_stock_info_tool, handler::get_stock_info_handler);
-    
 
+    // Register resources
+    const std::string path = std::string(DATA_DIR) + "/stock_codes.json";
+    auto file_resource = std::make_shared<mcp::file_resource>(
+        path,
+        "application/json",
+        "Korean stock codes");
+    server.register_resource("file://" + path, file_resource);
 
     // Start server
     std::cout << "Starting MCP server at " << srv_conf.host << ":" << srv_conf.port << std::endl;

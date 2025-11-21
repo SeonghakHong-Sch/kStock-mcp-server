@@ -1,6 +1,9 @@
 #include "mcp_sse_client.h"
+#include "json.hpp"
 #include <iostream>
 #include <string>
+
+using json = nlohmann::json;
 
 int main() {
     // Create a client
@@ -106,14 +109,25 @@ int main() {
         try {
             mcp::json stockinfo_params = {
                 {"request_id", "test"},
-                {"PDNO", "000660"},
+                {"PDNO", "000660"}
             };
             mcp::json stockinfo_result = client.call_tool("get_stock_info", stockinfo_params);
-            std::cout << "Fin Ratio: " << stockinfo_result.dump(2) << std::endl;
+            std::cout << "Stock info: " << stockinfo_result.dump(2) << std::endl;
         } catch (const mcp::mcp_exception& e){
             std::cerr << "Error: " << e.what() << std::endl;
         }
         
+        // 6. Test get_stock_codes (티커 조회)
+        // try {
+        //     mcp::json stockcode_params = {
+        //         {"request_id", "test"},
+        //         {"queries", json::array({"삼성전자", "하이닉스"})}
+        //     };
+        //     mcp::json stockcode_result = client.call_tool("get_stock_code", stockcode_params);
+        //     std::cout << "Stock codes: " << stockcode_result.dump(2) << std::endl;
+        // } catch (const mcp::mcp_exception& e){
+        //     std::cerr << "Error: " << e.what() << std::endl;
+        // }
         // 0. Test ~~
 
 

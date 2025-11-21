@@ -1,6 +1,5 @@
 #include "handler.h"
 
-#include <typeinfo>
 
 using json = nlohmann::json;
 using API = KInvestmentAPI::KInvestmentAPI;
