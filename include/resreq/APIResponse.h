@@ -69,15 +69,17 @@ public:
 };
 
 
-//재무비율  response class
-class FinRatioResponse : public baseResponse {
+//재무정보 토탈 response class
+class FinInfoResponse : public baseResponse {
 
 private:
-    json data_obj;
+    std::vector<json> fin_ratio_list;
+    std::vector<json> fin_income_list;
+    std::vector<json> fin_balance_list;
 
 public: 
-    FinRatioResponse(std::string request_id);
-    ~FinRatioResponse();
+    FinInfoResponse(std::string request_id);
+    ~FinInfoResponse();
 
     void setResponseInfo(const json& response_info) override;
     json getResponseInfo() override;
@@ -97,5 +99,22 @@ public:
     void setResponseInfo(const json& response_info) override;
     json getResponseInfo() override;
 };
+
+
+//주식 과거 정보(일,주,월 차트 정보) 응답 class
+class InquireItemcharResponse: public baseResponse {
+
+private:
+    json data_obj;
+
+public:
+    InquireItemcharResponse(std::string request_id);
+    ~InquireItemcharResponse();
+
+    void setResponseInfo(const json& response_info) override;
+    json getResponseInfo() override;
+};
+
+
 
 } // namespace APIResponse

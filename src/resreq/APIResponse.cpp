@@ -65,26 +65,32 @@ json StockPriceResponse::getResponseInfo() {
 }
 
 
-/*FinRatioResponse-----------------------------------------------------------*/
-FinRatioResponse::FinRatioResponse(std::string request_id):
+/*FinInfoResponse-----------------------------------------------------------*/
+FinInfoResponse::FinInfoResponse(std::string request_id):
     baseResponse(request_id) {}
-FinRatioResponse::~FinRatioResponse() {}
+FinInfoResponse::~FinInfoResponse() {}
 
 
-void FinRatioResponse::setResponseInfo(const json& response_info) {
-    msg_cd = response_info["msg_cd"];
-    msg1 = response_info["msg1"];
-    data_obj = response_info["output"];
+void FinInfoResponse::setResponseInfo(const json& response_info) {
+    //msg_cd = response_info["msg_cd"];
+    //msg1 = response_info["msg1"];
+    fin_ratio_list = response_info["fin_ratio_list"]["output"];
+    fin_income_list = response_info["fin_income_list"]["output"];
+    fin_balance_list = response_info["fin_balance_list"]["output"];
 }
 
 
-json FinRatioResponse::getResponseInfo() {
+json FinInfoResponse::getResponseInfo() {
     return {
         "etc", {
             {"request_id", request_id},
             {"time", timestamp},
         },
-        "data", data_obj
+        "data", {
+            {"fin_ratio_list", fin_ratio_list},
+            {"fin_income_list", fin_income_list},
+            {"fin_balance_list", fin_balance_list}
+        }
     };
 }
 
@@ -111,6 +117,31 @@ json StockInfoResponse::getResponseInfo() {
         "data", data_obj
     };
 }
+
+
+/*InquireItemcharResponse-----------------------------------------------------------*/
+InquireItemcharResponse::InquireItemcharResponse(std::string request_id):
+    baseResponse(request_id) {}
+InquireItemcharResponse::~InquireItemcharResponse() {}
+
+
+void InquireItemcharResponse::setResponseInfo(const json& response_info) {
+    msg_cd = response_info["msg_cd"];
+    msg1 = response_info["msg1"];
+    data_obj = response_info["output"];
+}
+
+
+json InquireItemcharResponse::getResponseInfo() {
+    return {
+        "etc", {
+            {"request_id", request_id},
+            {"time", timestamp},
+        },
+        "data", data_obj
+    };
+}
+
 
 
 } // namespace APIResponse

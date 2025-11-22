@@ -40,6 +40,10 @@ public:
     virtual void setRequestInfo(const json& request_info) = 0;
     virtual json getRequestInfo() = 0; //요청객체 모든정보 json 반환
     
+    //변수 설정
+    void set_tr_id(const std::string tr_id);
+    void set_url(const std::string url);
+
     //타임스탬프 반환
     std::time_t getTimestamp() const;
 
@@ -92,8 +96,8 @@ public:
 };
 
 
-//재무비율 요청 class
-class FinRatioRequest : public baseRequest {
+//주식 대차대조표, 손익계산서, 지무비율 total 요청 class
+class FinInfoRequest : public baseRequest { //default: 재무비율임 ㅇㅇ;
 
 private:
     std::string FID_DIV_CLS_CODE;
@@ -101,8 +105,8 @@ private:
     std::string fid_input_iscd;
 
 public:
-    FinRatioRequest(std::string request_id);
-    ~FinRatioRequest();
+    FinInfoRequest(std::string request_id);
+    ~FinInfoRequest();
 
     void setRequestInfo(const json& request_info) override;
     json getRequestInfo() override;
@@ -123,5 +127,26 @@ public:
     void setRequestInfo(const json& request_info) override;
     json getRequestInfo() override;
 };
+
+
+//주식 과거 정보(일,주,월 차트 정보) 요청 class
+class InquireItemcharRequest: public baseRequest {
+
+private:
+    std::string FID_COND_MRKT_DIV_CODE;
+    std::string FID_INPUT_ISCD;
+    std::string FID_INPUT_DATE_1;
+    std::string FID_INPUT_DATE_2;
+    std::string FID_PERIOD_DIV_CODE;
+    std::string FID_ORG_ADJ_PRC;
+
+public:
+    InquireItemcharRequest(std::string request_id);
+    ~InquireItemcharRequest();
+
+    void setRequestInfo(const json& request_info) override;
+    json getRequestInfo() override;
+};
+
 
 } // namespace APIRequest

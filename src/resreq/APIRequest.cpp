@@ -11,6 +11,15 @@ baseRequest::baseRequest(std::string request_id, std::string url, std::string ap
     tr_id(tr_id) {}
 baseRequest::~baseRequest(){}
 
+//변수 재설정
+void baseRequest::set_tr_id(const std::string tr_id) {
+    this->tr_id = tr_id;
+}
+
+void baseRequest::set_url(const std::string url) {
+    this->url = url;
+}
+
 
 //로거용 타임스탬프
 std::time_t baseRequest::getTimestamp() const {
@@ -114,14 +123,14 @@ json StockPriceRequest::getRequestInfo() {
 }
 
 
-/*FinRatioRequest-----------------------------------------------------------*/
+/*FinInfoRequest-----------------------------------------------------------*/
 //생성, 소멸
-FinRatioRequest::FinRatioRequest(std::string request_id):
+FinInfoRequest::FinInfoRequest(std::string request_id):
     baseRequest(request_id, "/uapi/domestic-stock/v1/finance/financial-ratio", "재무비율 조회", "FHKST66430300") {}
-FinRatioRequest::~FinRatioRequest(){}
+FinInfoRequest::~FinInfoRequest(){}
 
 //setRequestInfo 구현
-void FinRatioRequest::setRequestInfo(const json& request_info) {
+void FinInfoRequest::setRequestInfo(const json& request_info) {
     content_type = request_info["content-type"];
     custtype = request_info["custtype"];
     FID_DIV_CLS_CODE = request_info["FID_DIV_CLS_CODE"];
@@ -130,7 +139,7 @@ void FinRatioRequest::setRequestInfo(const json& request_info) {
 }
 
 //getRequestInfo 구현
-json FinRatioRequest::getRequestInfo() {
+json FinInfoRequest::getRequestInfo() {
     return {
         {"etc", {
             {"request_id", request_id},
@@ -182,6 +191,50 @@ json StockInfoRequest::getRequestInfo() {
         {"query_params", {
             {"PRDT_TYPE_CD", PRDT_TYPE_CD},
             {"PDNO", PDNO}
+        }}
+    };
+}
+
+
+/*InquireItemcharRequest-----------------------------------------------------------*/
+//생성, 소멸
+InquireItemcharRequest::InquireItemcharRequest(std::string request_id):
+    baseRequest(request_id, "/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice", "주식 일/주/월 시세 조회", "FHKST03010100") {}
+InquireItemcharRequest::~InquireItemcharRequest(){}
+
+//setRequestInfo 구현
+void InquireItemcharRequest::setRequestInfo(const json& request_info) {
+    content_type = request_info["content-type"];
+    custtype = request_info["custtype"];
+    FID_COND_MRKT_DIV_CODE = request_info["FID_COND_MRKT_DIV_CODE"];
+    FID_INPUT_ISCD = request_info["FID_INPUT_ISCD"];
+    FID_INPUT_DATE_1 = request_info["FID_INPUT_DATE_1"];
+    FID_INPUT_DATE_2 = request_info["FID_INPUT_DATE_2"];
+    FID_PERIOD_DIV_CODE = request_info["FID_PERIOD_DIV_CODE"];
+    FID_ORG_ADJ_PRC = request_info["FID_ORG_ADJ_PRC"];
+}
+
+//getRequestInfo 구현
+json InquireItemcharRequest::getRequestInfo() {
+    return {
+        {"etc", {
+            {"request_id", request_id},
+            {"url", url},
+            {"time", timestamp},
+            {"api_name", api_name}
+        }},
+        {"headers", {
+            {"content-type", content_type},
+            {"tr_id", tr_id},
+            {"custtype", custtype}
+        }},
+        {"query_params", {
+            {"FID_COND_MRKT_DIV_CODE", FID_COND_MRKT_DIV_CODE},
+            {"FID_INPUT_ISCD", FID_INPUT_ISCD},
+            {"FID_INPUT_DATE_1", FID_INPUT_DATE_1},
+            {"FID_INPUT_DATE_2", FID_INPUT_DATE_2},
+            {"FID_PERIOD_DIV_CODE", FID_PERIOD_DIV_CODE},
+            {"FID_ORG_ADJ_PRC", FID_ORG_ADJ_PRC}
         }}
     };
 }
