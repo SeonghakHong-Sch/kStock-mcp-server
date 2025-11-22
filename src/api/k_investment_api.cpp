@@ -55,11 +55,9 @@ void KInvestmentAPI::setAccessToken() {
         {"appsecret", appsecret}
     };
     auto res = client.Post("/oauth2/tokenP", body.dump(), "application/json"); //std::shared_ptr<httplib::Response>
-    std::cout << res->body << std::endl;
     if (res && res->status == 200) {
         json response_json = json::parse(res->body);
         access_token = "Bearer " + response_json["access_token"].get<std::string>();
-        std::cout << access_token << std::endl;
         expires_in = response_json["expires_in"].dump(); //int to string
         access_token_token_expired = response_json["access_token_token_expired"];
 
