@@ -5,6 +5,7 @@
 #include "APIRequest.h"
 #include "APIResponse.h"
 #include "tool.h"
+#include "mcp_logger.h"
 
 #include <string>
 using json = nlohmann::json;

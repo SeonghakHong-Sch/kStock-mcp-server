@@ -55,16 +55,17 @@ void KInvestmentAPI::setAccessToken() {
         {"appsecret", appsecret}
     };
     auto res = client.Post("/oauth2/tokenP", body.dump(), "application/json"); //std::shared_ptr<httplib::Response>
+
     if (res && res->status == 200) {
         json response_json = json::parse(res->body);
         access_token = "Bearer " + response_json["access_token"].get<std::string>();
-        expires_in = response_json["expires_in"].dump(); //int to string
+        expires_in = response_json["expires_in"].dump(); //to string
         access_token_token_expired = response_json["access_token_token_expired"];
 
-        //일단은 예외처리 요렇게
-        std::cout << "Access token set successfully: " << access_token << std::endl;
+        LOG_INFO("Access token set successfully");
     } else {
-        std::cout << "Failed to obtain access token" << std::endl;
+        LOG_ERROR("Failed to set access token");
+        throw std::runtime_error("Failed to obtain access token");
     }
 }
 
@@ -77,9 +78,10 @@ void KInvestmentAPI::revokeAccessToken() {
 
     auto res = client.Post("/oauth2/revokeP", body.dump(), "application/json");
     if (res && res->status == 200) {
-        std::cout << "Access token revoked successfully" << std::endl;
+        LOG_INFO("Access token revoked successfully");
     } else {
-        std::cout << "Failed to revoke access token" << std::endl;
+        LOG_ERROR("Failed to revoke access token");
+        throw std::runtime_error("Failed to revoke access token");
     }
 }
 
@@ -104,33 +106,51 @@ void KInvestmentAPI::request_k_stock(json& request ,json& response, int method) 
     //const std::string body = tool::build_query(request["body"]);
 
     switch(method) {
-        case 0: {
+        case 0: { //GET
             auto res = client.Get(url + "?" + query_params, headers);
-            response = json::parse(res->body);
-            if (res && response["rt_cd"] == "0") {
-                std::cout << "GET request " + api_name + " successful" << std::endl;
-            } else {
-                std::cout << "GET request " + api_name + " failed" << std::endl;
-                std::cout << response.dump(4) << std::endl;
+            
+            if (!res || res->status != 200) {
+                LOG_ERROR(api_name, "API Request failed");
+                throw std::runtime_error("API Request failed");
             }
+
+            response = json::parse(res->body);
+
+            if (response["rt_cd"] == "0") {
+                LOG_INFO("Get request ", api_name, ": successful");
+            } else {
+                LOG_ERROR("Get request ", api_name, ": failed");
+                throw std::runtime_error("K-stock investment API response is invalid");
+            }
+
             break;
         }
-        case 1: {
+
+        case 1: { //POST
             const httplib::Params params = {
                 request["body"].begin(), request["body"].end()
             };
             auto res = client.Post(url, headers, params);
-            response = json::parse(res->body);
-            if (res && response["rt_code"] == "0") {
-                std::cout << "POST request" + api_name + " successful" << std::endl;
-            } else {
-                std::cout << "POST request" + api_name + " failed" << std::endl;
-                std::cout << response.dump(4) << std::endl;
+
+            if (!res || res->status != 200) {
+                LOG_ERROR(api_name, "API Request failed");
+                throw std::runtime_error("API Request failed");
             }
+
+            response = json::parse(res->body);
+            
+            if (response["rt_cd"] == "0") {
+                LOG_INFO("Get request ", api_name, ": successful");
+            } else {
+                LOG_ERROR("Get request ", api_name, ": failed");
+                throw std::runtime_error("K-stock investment API response is invalid");
+            }
+
             break;
         }
+
         default:
-            std::cerr << "Invalid method" << std::endl;
+            throw std::runtime_error("Invalid API method");
     }
 
 

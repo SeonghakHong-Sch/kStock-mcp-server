@@ -15,6 +15,7 @@
 #include <json.hpp>
 #include <cstdlib>
 #include <future>
+#include <vector>
 
 using json = nlohmann::json;
 
