@@ -106,6 +106,7 @@ class InquireItemcharResponse: public baseResponse {
 
 private:
     json data_obj;
+    std::vector<json> data_list;
 
 public:
     InquireItemcharResponse(std::string request_id);

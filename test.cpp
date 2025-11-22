@@ -85,6 +85,15 @@ int main() {
         .with_string_param("PDNO", "ticker, if ETN, start with Q(EX. Q500001)")
         .build();
 
+    mcp::tool get_itemchart_tool = mcp::tool_builder("get_itemchart")
+        .with_description("get inquire-daily itemchart price")
+        .with_string_param("FID_COND_MRKT_DIV_CODE", "condition market division code")
+        .with_string_param("FID_INPUT_ISCD", "ticker")
+        .with_string_param("FID_INPUT_DATE_1", "start date")
+        .with_string_param("FID_INPUT_DATE_2", "end date, max: 100")
+        .with_string_param("FID_PERIOD_DIV_CODE", "D: Daily, W: Weekly, M: Monthly, Y: Yearly")
+        .with_string_param("FID_ORG_ADJ_PRC", "0: Adjusted price, 1: Original price")
+        .build();
     
     // Register tool
     server.register_tool(set_stock_connection_tool, handler::set_stock_connection_handler);
@@ -93,6 +102,7 @@ int main() {
     server.register_tool(get_stockprice_tool, handler::get_stockprice_handler);
     server.register_tool(get_fin_info_tool, handler::get_financial_info_handler);
     server.register_tool(get_stock_info_tool, handler::get_stock_info_handler);
+    server.register_tool(get_itemchart_tool, handler::get_itemchart_handler);
 
     // Register resources
     const std::string path = std::string(DATA_DIR) + "/stock_codes.json";

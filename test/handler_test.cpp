@@ -116,6 +116,24 @@ int main() {
         } catch (const mcp::mcp_exception& e){
             std::cerr << "Error: " << e.what() << std::endl;
         }
+
+        // 6. Test get_itemchart_handler (주식 과거정보(일,주,월,년) 봉 조회)
+                std::cout << "\n=== Testing get_itemchart_handler ===" << std::endl;
+        try {
+            mcp::json chart_params = {
+                {"request_id", "test"},
+                {"FID_COND_MRKT_DIV_CODE", "J"},
+                {"FID_INPUT_ISCD", "005930"},
+                {"FID_INPUT_DATE_1", "2025-01-01"},
+                {"FID_INPUT_DATE_2", "2025-03-01"},
+                {"FID_PERIOD_DIV_CODE", "D"},
+                {"FID_ORG_ADJ_PRC", "1"}
+            };
+            mcp::json chart_result = client.call_tool("get_itemchart", chart_params);
+            std::cout << "Chart info: " << chart_result.dump(2) << std::endl;
+        } catch (const mcp::mcp_exception& e){
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
         
 
         // 0. Test ~~

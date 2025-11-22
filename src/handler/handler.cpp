@@ -52,7 +52,6 @@ mcp::json get_accountinfo_handler(const mcp::json& params, const std::string& /*
     
     api->request_k_stock(req, res, 0);
     account_response.setResponseInfo(res);
-    std::cout << typeid(res).name() << std::endl;
     return {
         {
             {"type", "text"},
@@ -210,7 +209,40 @@ mcp::json get_stock_info_handler(const mcp::json& params, const std::string& /* 
 }
 
 mcp::json get_itemchart_handler(const mcp::json& params, const std::string& /* session_id */) {
-    
+    auto api = API::getInstance();
+
+    const std::string request_id = params["request_id"].is_string()
+        ? params["request_id"].get<std::string>()
+        : std::to_string(params["request_id"].get<int>());
+
+    APIRequest:: InquireItemcharRequest itemchar_request(request_id);
+    APIResponse::InquireItemcharResponse itemchar_response(request_id);
+
+    itemchar_request.setRequestInfo(
+        {
+            {"content-type", "application/json; charset=utf-8"},
+            {"custtype", "P"},
+            {"FID_COND_MRKT_DIV_CODE", params["FID_COND_MRKT_DIV_CODE"]},
+            {"FID_INPUT_ISCD", params["FID_INPUT_ISCD"]},
+            {"FID_INPUT_DATE_1", params["FID_INPUT_DATE_1"]},
+            {"FID_INPUT_DATE_2", params["FID_INPUT_DATE_2"]},
+            {"FID_PERIOD_DIV_CODE", params["FID_PERIOD_DIV_CODE"]},
+            {"FID_ORG_ADJ_PRC", params["FID_ORG_ADJ_PRC"]}
+        }
+    );
+
+    json req, res;
+    req = itemchar_request.getRequestInfo();
+
+    api->request_k_stock(req, res, 0);
+
+    itemchar_response.setResponseInfo(res);
+    return {
+        {
+            {"type", "text"},
+            {"text", res.dump()}
+        }
+    };
 }
 
 mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);

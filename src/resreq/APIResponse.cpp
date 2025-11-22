@@ -128,7 +128,8 @@ InquireItemcharResponse::~InquireItemcharResponse() {}
 void InquireItemcharResponse::setResponseInfo(const json& response_info) {
     msg_cd = response_info["msg_cd"];
     msg1 = response_info["msg1"];
-    data_obj = response_info["output"];
+    data_obj = response_info["output1"];
+    data_list = response_info["output2"];
 }
 
 
