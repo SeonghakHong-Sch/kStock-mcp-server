@@ -318,7 +318,86 @@ mcp::json get_itemchart_handler(const mcp::json& params, const std::string& /* s
     };
 }
 
-mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);
+mcp::json order_stock_handler(const mcp::json& params, const std::string& /* session_id */) {
+    auto api = API::getInstance();
+
+    /*---파라미터 설정---*/
+    const std::string request_id = params["request_id"].is_string()
+        ? params["request_id"].get<std::string>()
+        : std::to_string(params["request_id"].get<int>());
+
+    // 필수 파라미터 검사
+    if (!tool::check_json(params, {"ORD_TYPE", "PDNO", "ORD_DVSN", "ORD_QTY", "ORD_UNPR"})) {
+        throw mcp::mcp_exception(mcp::error_code::invalid_params, "Missing parameters");
+    }
+
+    const char* K_cano = std::getenv("K_cano");
+    const char* K_cano2 = std::getenv("K_cano2");
+
+    if (K_cano == nullptr || K_cano2 == nullptr) {
+        LOG_ERROR("Get env variable error");
+        throw std::runtime_error("Get env variable error");
+    }
+
+    // 매수/매도 구분
+    std::string ord_type = params["ORD_TYPE"].get<std::string>();
+    std::string tr_id;
+    std::string api_name;
+
+    if (ord_type == "B" || ord_type == "buy") {
+        tr_id = "TTTC0012U";  // 매수
+        api_name = "주식 매수 주문";
+    } else if (ord_type == "S" || ord_type == "sell") {
+        tr_id = "TTTC0011U";  // 매도
+        api_name = "주식 매도 주문";
+    } else {
+        throw mcp::mcp_exception(mcp::error_code::invalid_params, "Invalid ORD_TYPE. Use 'B'(buy) or 'S'(sell)");
+    }
+
+    // 선택 파라미터 처리
+    std::string SLL_TYPE = params.contains("SLL_TYPE") ? params["SLL_TYPE"].get<std::string>() : "";
+    std::string CNDT_PRIC = params.contains("CNDT_PRIC") ? params["CNDT_PRIC"].get<std::string>() : "";
+    /*---파라미터 설정 끝---*/
+
+    APIRequest::OrderStockRequest order_request(request_id);
+    APIResponse::OrderStockResponse order_response(request_id);
+
+    json res, req;
+
+    try {
+        order_request.setRequestInfo(
+            {
+                {"content-type", "application/json; charset=utf-8"},
+                {"custtype", "P"},
+                {"tr_id", tr_id},
+                {"CANO", K_cano},
+                {"ACNT_PRDT_CD", K_cano2},
+                {"PDNO", params["PDNO"]},
+                {"ORD_DVSN", params["ORD_DVSN"]},
+                {"ORD_QTY", params["ORD_QTY"]},
+                {"SLL_TYPE", SLL_TYPE},
+                {"CNDT_PRIC", CNDT_PRIC}
+            }
+        );
+        
+        res = order_request.getRequestInfo();
+
+        api->request_k_stock(req, res, 1);  // POST 요청
+
+        order_response.setResponseInfo(res);
+    } catch(const std::exception& e) {
+        LOG_ERROR("Order Stock Error", e.what());
+        throw;
+    }
+    
+
+    return {
+        {
+            {"type", "text"},
+            {"text", res.dump()}
+        }
+    };
+}
 
 mcp::json disconnect_stock_handler(const mcp::json& params, const std::string& /* session_id */) {
     auto api = API::getInstance();

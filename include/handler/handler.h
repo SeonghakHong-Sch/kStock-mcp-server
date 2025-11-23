@@ -33,7 +33,7 @@ mcp::json get_stock_info_handler(const mcp::json& params, const std::string& /* 
 
 mcp::json get_itemchart_handler(const mcp::json& params, const std::string& /* session_id */);
 
-mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);
+mcp::json order_stock_handler(const mcp::json& params, const std::string& /* session_id */);
 
 mcp::json disconnect_stock_handler(const mcp::json& params, const std::string& /* session_id */);
 
