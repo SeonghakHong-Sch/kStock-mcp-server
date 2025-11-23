@@ -132,5 +132,19 @@ public:
 };
 
 
+//투자자 동향 응답 class
+class InvestorTrendResponse: public baseResponse {
+
+private:
+    std::vector<json> data_list;
+
+public:
+    InvestorTrendResponse(std::string request_id);
+    ~InvestorTrendResponse();
+
+    void setResponseInfo(const json& response_info) override;
+    json getResponseInfo() override;
+};
+
 
 } // namespace APIResponse

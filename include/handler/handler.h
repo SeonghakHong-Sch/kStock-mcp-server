@@ -35,6 +35,8 @@ mcp::json get_itemchart_handler(const mcp::json& params, const std::string& /* s
 
 mcp::json order_stock_handler(const mcp::json& params, const std::string& /* session_id */);
 
+mcp::json get_investor_trend_handler(const mcp::json& params, const std::string& /* session_id */);
+
 mcp::json disconnect_stock_handler(const mcp::json& params, const std::string& /* session_id */);
 
 

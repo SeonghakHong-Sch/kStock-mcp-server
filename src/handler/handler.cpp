@@ -399,6 +399,52 @@ mcp::json order_stock_handler(const mcp::json& params, const std::string& /* ses
     };
 }
 
+mcp::json get_investor_trend_handler(const mcp::json& params, const std::string& /* session_id */) {
+    auto api = API::getInstance();
+
+    const std::string request_id = params["request_id"].is_string()
+        ? params["request_id"].get<std::string>()
+        : std::to_string(params["request_id"].get<int>());
+
+    if (!tool::check_json(params, {"FID_COND_MRKT_DIV_CODE", "FID_INPUT_ISCD", "FID_INPUT_DATE_1"})) { //필수 파라미터 있는지 검사, 없으면 예외처리
+        throw mcp::mcp_exception(mcp::error_code::invalid_params, "Missing parameters");
+    }
+
+    APIRequest::InvestorTrendRequest trend_request(request_id);
+    APIResponse::InvestorTrendResponse trend_response(request_id);
+
+    json req, res;
+
+    try {
+        trend_request.setRequestInfo(
+            {
+                {"content-type", "application/json; charset=utf-8"},
+                {"custtype", "P"},
+                {"FID_COND_MRKT_DIV_CODE", params["FID_COND_MRKT_DIV_CODE"]},
+                {"FID_INPUT_ISCD", params["FID_INPUT_ISCD"]},
+                {"FID_INPUT_DATE_1", params["FID_INPUT_DATE_1"]}
+            }
+        );
+
+        req = trend_request.getRequestInfo();
+        
+        api->request_k_stock(req, res, 0);
+
+        trend_response.setResponseInfo(res);
+
+    } catch(const std::exception& e) {
+        LOG_ERROR("Get Investor Trend Error", e.what());
+        throw;
+    }
+
+    return {
+        {
+            {"type", "text"},
+            {"text", res.dump()}
+        }
+    };
+}
+
 mcp::json disconnect_stock_handler(const mcp::json& params, const std::string& /* session_id */) {
     auto api = API::getInstance();
     api->revokeAccessToken();

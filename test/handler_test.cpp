@@ -136,6 +136,21 @@ int main() {
         }
         
 
+        // 7. Test get_investor_trend (투자자 매매 동향 조회)
+        std::cout << "\n=== Testing get_investor_trend ===" << std::endl;
+        try {
+            mcp::json trend_params = {
+                {"request_id", "test"},
+                {"FID_COND_MRKT_DIV_CODE", "J"},
+                {"FID_INPUT_ISCD", "005930"},
+                {"FID_INPUT_DATE_1", "2025-01-01"}
+            };
+            mcp::json trend_result = client.call_tool("get_investor_trend", trend_params);
+            std::cout << "Investor Trend: " << trend_result.dump(2) << std::endl;
+        } catch (const mcp::mcp_exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+
         // 0. Test ~~
 
 

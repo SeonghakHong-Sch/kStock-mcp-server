@@ -169,4 +169,30 @@ json OrderStockResponse::getResponseInfo() {
 }
 
 
+/*InvestorTrendResponse-----------------------------------------------------------*/
+InvestorTrendResponse::InvestorTrendResponse(std::string request_id):
+    baseResponse(request_id) {}
+InvestorTrendResponse::~InvestorTrendResponse() {}
+
+
+void InvestorTrendResponse::setResponseInfo(const json& response_info) {
+    msg_cd = response_info["msg_cd"];
+    msg1 = response_info["msg1"];
+    data_list = response_info["output2"];
+}
+
+
+json InvestorTrendResponse::getResponseInfo() {
+    return {
+        "etc", {
+            {"request_id", request_id},
+            {"time", timestamp},
+        },
+        "data", {
+            {"data_list", data_list}
+        }
+    };
+}
+
+
 } // namespace APIResponse

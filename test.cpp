@@ -105,7 +105,14 @@ int main() {
         .with_string_param("ORD_UNPR", "order price, the price per share. 0: market price")
         .with_string_param("CNDT_PRIC", "stop condition price. required when only ORD_DVSN = 22", false)
         .build();
-    
+
+    mcp::tool get_investor_trend_tool = mcp::tool_builder("get_investor_trend")
+        .with_description("get investor trading trend by ticker")
+        .with_string_param("FID_COND_MRKT_DIV_CODE", "condition market division code")
+        .with_string_param("FID_INPUT_ISCD", "ticker")
+        .with_string_param("FID_INPUT_DATE_1", "date (YYYYMMDD)")
+        .build();
+
     // Register tool
     server.register_tool(set_stock_connection_tool, handler::set_stock_connection_handler);
     server.register_tool(get_accountinfo_tool, handler::get_accountinfo_handler);
@@ -115,6 +122,7 @@ int main() {
     server.register_tool(get_stock_info_tool, handler::get_stock_info_handler);
     server.register_tool(get_itemchart_tool, handler::get_itemchart_handler);
     server.register_tool(order_stock_tool, handler::order_stock_handler);
+    server.register_tool(get_investor_trend_tool, handler::get_investor_trend_handler);
 
     // Register resources
     const std::string path = std::string(DATA_DIR) + "/stock_codes.json";

@@ -289,4 +289,45 @@ json OrderStockRequest::getRequestInfo() {
 }
 
 
+/*InvestorTrendRequest-----------------------------------------------------------*/
+//생성, 소멸
+InvestorTrendRequest::InvestorTrendRequest(std::string request_id):
+    baseRequest(request_id, "/uapi/domestic-stock/v1/quotations/investor-trade-by-stock-daily", "투자자 매매 동향", "FHPTJ04160001") {}
+InvestorTrendRequest::~InvestorTrendRequest(){}
+
+//setRequestInfo 구현
+void InvestorTrendRequest::setRequestInfo(const json& request_info) {
+    content_type = request_info.value("content-type", "application/json; charset=utf-8");
+    custtype = request_info.value("custtype", "P");
+    FID_COND_MRKT_DIV_CODE = request_info["FID_COND_MRKT_DIV_CODE"];
+    FID_INPUT_ISCD = request_info["FID_INPUT_ISCD"];
+    FID_INPUT_DATE_1 = request_info["FID_INPUT_DATE_1"];
+
+}
+
+//getRequestInfo 구현
+json InvestorTrendRequest::getRequestInfo() {
+    return {
+        {"etc", {
+            {"request_id", request_id},
+            {"url", url},
+            {"time", timestamp},
+            {"api_name", api_name}
+        }},
+        {"headers", {
+            {"content-type", content_type},
+            {"tr_id", tr_id},
+            {"custtype", custtype}
+        }},
+        {"query_params", {
+            {"FID_COND_MRKT_DIV_CODE", FID_COND_MRKT_DIV_CODE},
+            {"FID_INPUT_ISCD", FID_INPUT_ISCD},
+            {"FID_INPUT_DATE_1", FID_INPUT_DATE_1},
+            {"FID_ORG_ADJ_PRC", FID_ORG_ADJ_PRC},
+            {"FID_ETC_CLS_CODE", FID_ETC_CLS_CODE}
+        }}
+    };
+}
+
+
 } // namespace APIRequest

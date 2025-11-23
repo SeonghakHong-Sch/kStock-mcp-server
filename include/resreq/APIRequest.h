@@ -170,4 +170,23 @@ public:
 };
 
 
+//투자자 매매 동향 요청 class
+class InvestorTrendRequest: public baseRequest {
+
+private:
+    std::string FID_COND_MRKT_DIV_CODE;
+    std::string FID_INPUT_ISCD;
+    std::string FID_INPUT_DATE_1;
+    std::string FID_ORG_ADJ_PRC = "";
+    std::string FID_ETC_CLS_CODE = "";
+
+public:
+    InvestorTrendRequest(std::string request_id);
+    ~InvestorTrendRequest();
+
+    void setRequestInfo(const json& request_info) override;
+    json getRequestInfo() override;
+};
+
+
 } // namespace APIRequest
