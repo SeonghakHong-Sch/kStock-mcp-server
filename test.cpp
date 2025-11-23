@@ -94,6 +94,17 @@ int main() {
         .with_string_param("FID_PERIOD_DIV_CODE", "D: Daily, W: Weekly, M: Monthly, Y: Yearly")
         .with_string_param("FID_ORG_ADJ_PRC", "0: Adjusted price, 1: Original price")
         .build();
+
+    mcp::tool order_stock_tool = mcp::tool_builder("order_stock")
+        .with_description("order korean stock(buy, sell)")
+        .with_string_param("ORD_TYPE", "Order type. B: buy, S: Sell")
+        .with_string_param("PDNO", "ticker")
+        .with_string_param("SLL_TYPE", "sell type. used only sell orders. 00(default): 일반매도, 02: dladmlaoao, 05(대차매도)", false)
+        .with_string_param("ORD_DVSN", "order type")
+        .with_string_param("ORD_QTY", "order quantity")
+        .with_string_param("ORD_UNPR", "order price, the price per share. 0: market price")
+        .with_string_param("CNDT_PRIC", "stop condition price. required when only ORD_DVSN = 22", false)
+        .build();
     
     // Register tool
     server.register_tool(set_stock_connection_tool, handler::set_stock_connection_handler);
@@ -103,6 +114,7 @@ int main() {
     server.register_tool(get_fin_info_tool, handler::get_financial_info_handler);
     server.register_tool(get_stock_info_tool, handler::get_stock_info_handler);
     server.register_tool(get_itemchart_tool, handler::get_itemchart_handler);
+    server.register_tool(order_stock_tool, handler::order_stock_handler);
 
     // Register resources
     const std::string path = std::string(DATA_DIR) + "/stock_codes.json";

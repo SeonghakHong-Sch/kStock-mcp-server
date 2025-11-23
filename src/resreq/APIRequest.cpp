@@ -240,4 +240,53 @@ json InquireItemcharRequest::getRequestInfo() {
 }
 
 
+/*OrderStockRequest-----------------------------------------------------------*/
+//생성, 소멸
+OrderStockRequest::OrderStockRequest(std::string request_id):
+    baseRequest(request_id, "/uapi/domestic-stock/v1/trading/order-cash", "주식 주문", "TTTC0012U") {}
+OrderStockRequest::~OrderStockRequest(){}
+
+//setRequestInfo 구현
+void OrderStockRequest::setRequestInfo(const json& request_info) {
+    content_type = request_info.value("content-type", "application/json; charset=utf-8");
+    custtype = request_info.value("custtype", "P");
+    tr_id = request_info["tr_id"];
+    CANO = request_info["CANO"];
+    ACNT_PRDT_CD = request_info["ACNT_PRDT_CD"];
+    PDNO = request_info["PDNO"];
+    ORD_DVSN = request_info["ORD_DVSN"];
+    ORD_QTY = request_info["ORD_QTY"];
+    ORD_UNPR = request_info["ORD_UNPR"];
+    SLL_TYPE = request_info["SLL_TYPE"];
+    CNDT_PRIC = request_info["CNDT_PRIC"];
+}
+
+//getRequestInfo 구현 (POST용 - body 사용)
+json OrderStockRequest::getRequestInfo() {
+    return {
+        {"etc", {
+            {"request_id", request_id},
+            {"url", url},
+            {"time", timestamp},
+            {"api_name", api_name}
+        }},
+        {"headers", {
+            {"content-type", content_type},
+            {"tr_id", tr_id},
+            {"custtype", custtype}
+        }},
+        {"body", {
+            {"CANO", CANO},
+            {"ACNT_PRDT_CD", ACNT_PRDT_CD},
+            {"PDNO", PDNO},
+            {"ORD_DVSN", ORD_DVSN},
+            {"ORD_QTY", ORD_QTY},
+            {"ORD_UNPR", ORD_UNPR},
+            {"SLL_TYPE", SLL_TYPE},
+            {"CNDT_PRIC", CNDT_PRIC}
+        }}
+    };
+}
+
+
 } // namespace APIRequest

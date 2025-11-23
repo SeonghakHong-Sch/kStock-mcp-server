@@ -117,5 +117,20 @@ public:
 };
 
 
+//주식주문 응답 class
+class OrderStockResponse: public baseResponse {
+
+private:
+    json data_obj;
+
+public:
+    OrderStockResponse(std::string request_id);
+    ~OrderStockResponse();
+
+    void setResponseInfo(const json& response_info) override;
+    json getResponseInfo() override;
+};
+
+
 
 } // namespace APIResponse

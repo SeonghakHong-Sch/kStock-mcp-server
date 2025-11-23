@@ -102,11 +102,10 @@ void KInvestmentAPI::request_k_stock(json& request ,json& response, int method) 
     for (auto& [key, value] : request["headers"].items()) {
         headers.emplace(key, value.get<std::string>());
     }
-    const std::string query_params = tool::build_query(request["query_params"]);
-    //const std::string body = tool::build_query(request["body"]);
-
+    
     switch(method) {
         case 0: { //GET
+            const std::string query_params = tool::build_query(request["query_params"]);
             auto res = client.Get(url + "?" + query_params, headers);
             
             if (!res || res->status != 200) {
@@ -119,7 +118,7 @@ void KInvestmentAPI::request_k_stock(json& request ,json& response, int method) 
             if (response["rt_cd"] == "0") {
                 LOG_INFO("Get request ", api_name, ": successful");
             } else {
-                LOG_ERROR("Get request ", api_name, ": failed");
+                LOG_ERROR("Get request ", api_name, ": failed", response.dump(2));
                 throw std::runtime_error("K-stock investment API response is invalid");
             }
 
@@ -127,6 +126,8 @@ void KInvestmentAPI::request_k_stock(json& request ,json& response, int method) 
         }
 
         case 1: { //POST
+            //const std::string body = tool::build_query(request["body"]);
+
             const httplib::Params params = {
                 request["body"].begin(), request["body"].end()
             };
@@ -142,7 +143,7 @@ void KInvestmentAPI::request_k_stock(json& request ,json& response, int method) 
             if (response["rt_cd"] == "0") {
                 LOG_INFO("Get request ", api_name, ": successful");
             } else {
-                LOG_ERROR("Get request ", api_name, ": failed");
+                LOG_ERROR("Get request ", api_name, ": failed", response.dump(2));
                 throw std::runtime_error("K-stock investment API response is invalid");
             }
 

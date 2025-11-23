@@ -149,4 +149,25 @@ public:
 };
 
 
+//주식 주문 요청 class (POST)
+class OrderStockRequest: public baseRequest {
+private:
+    std::string CANO;           // 계좌번호 앞 8자리
+    std::string ACNT_PRDT_CD;   // 계좌 끝 2자리
+    std::string PDNO;           // 종목코드
+    std::string SLL_TYPE; // 매도유형 (매도시만 사용)
+    std::string ORD_DVSN;       // 주문구분
+    std::string ORD_QTY;        // 주문수량
+    std::string ORD_UNPR;       // 주문단가 (0: 시장가)
+    std::string CNDT_PRIC; // 조건가격 (ORD_DVSN=22일때만)
+
+public:
+    OrderStockRequest(std::string request_id);
+    ~OrderStockRequest();
+
+    void setRequestInfo(const json& request_info) override;
+    json getRequestInfo() override;
+};
+
+
 } // namespace APIRequest
