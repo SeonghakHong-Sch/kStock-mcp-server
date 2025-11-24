@@ -38,6 +38,11 @@ std::string KInvestmentAPI::get_base_url() const {
     return base_url;
 }
 
+//토큰 연결 여부 확인
+bool KInvestmentAPI::isConnected() const {
+    return !access_token.empty();
+}
+
 
 //한투 api 클라이언트 설정 함수
 void KInvestmentAPI::setClient(json config) {
@@ -54,6 +59,7 @@ void KInvestmentAPI::setAccessToken() {
         {"appkey", appkey},
         {"appsecret", appsecret}
     };
+
     auto res = client.Post("/oauth2/tokenP", body.dump(), "application/json"); //std::shared_ptr<httplib::Response>
 
     if (res && res->status == 200) {

@@ -37,6 +37,7 @@ public:
 
     //단순 정보 관련
     std::string get_base_url() const;
+    bool isConnected() const;  // 토큰 유효한지 확인
 
     //연결 관련
     void setClient(json config);

@@ -8,7 +8,17 @@ namespace handler {
 
 mcp::json set_stock_connection_handler(const mcp::json& params, const std::string& /* session_id */) {
     auto api = API::getInstance();
-    
+
+    // 이미 연결되어 있으면 바로 성공 반환
+    if (api->isConnected()) {
+        return {
+            {
+                {"type", "text"},
+                {"text", "Already connected. Token is valid for 1 hour. No need to reconnect."}
+            }
+        };
+    }
+
     const char* K_appkey = std::getenv("K_appkey");
     const char* K_appsecret = std::getenv("K_appsecret");
 
@@ -23,13 +33,13 @@ mcp::json set_stock_connection_handler(const mcp::json& params, const std::strin
         {"appsecret", K_appsecret}
     };
     api->setClient(config);
-    
+
     api->setAccessToken();
-    
+
     return {
         {
             {"type", "text"},
-            {"text", "StockConnection Complete"}
+            {"text", "StockConnection Complete. Token valid for 1 hour."}
         }
     };
 }
