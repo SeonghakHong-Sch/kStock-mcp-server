@@ -65,26 +65,32 @@ json StockPriceResponse::getResponseInfo() {
 }
 
 
-/*FinRatioResponse-----------------------------------------------------------*/
-FinRatioResponse::FinRatioResponse(std::string request_id):
+/*FinInfoResponse-----------------------------------------------------------*/
+FinInfoResponse::FinInfoResponse(std::string request_id):
     baseResponse(request_id) {}
-FinRatioResponse::~FinRatioResponse() {}
+FinInfoResponse::~FinInfoResponse() {}
 
 
-void FinRatioResponse::setResponseInfo(const json& response_info) {
-    msg_cd = response_info["msg_cd"];
-    msg1 = response_info["msg1"];
-    data_obj = response_info["output"];
+void FinInfoResponse::setResponseInfo(const json& response_info) {
+    //msg_cd = response_info["msg_cd"];
+    //msg1 = response_info["msg1"];
+    fin_ratio_list = response_info["fin_ratio_list"]["output"];
+    fin_income_list = response_info["fin_income_list"]["output"];
+    fin_balance_list = response_info["fin_balance_list"]["output"];
 }
 
 
-json FinRatioResponse::getResponseInfo() {
+json FinInfoResponse::getResponseInfo() {
     return {
         "etc", {
             {"request_id", request_id},
             {"time", timestamp},
         },
-        "data", data_obj
+        "data", {
+            {"fin_ratio_list", fin_ratio_list},
+            {"fin_income_list", fin_income_list},
+            {"fin_balance_list", fin_balance_list}
+        }
     };
 }
 
@@ -109,6 +115,82 @@ json StockInfoResponse::getResponseInfo() {
             {"time", timestamp},
         },
         "data", data_obj
+    };
+}
+
+
+/*InquireItemcharResponse-----------------------------------------------------------*/
+InquireItemcharResponse::InquireItemcharResponse(std::string request_id):
+    baseResponse(request_id) {}
+InquireItemcharResponse::~InquireItemcharResponse() {}
+
+
+void InquireItemcharResponse::setResponseInfo(const json& response_info) {
+    msg_cd = response_info["msg_cd"];
+    msg1 = response_info["msg1"];
+    data_obj = response_info["output1"];
+    data_list = response_info["output2"];
+}
+
+
+json InquireItemcharResponse::getResponseInfo() {
+    return {
+        "etc", {
+            {"request_id", request_id},
+            {"time", timestamp},
+        },
+        "data", data_obj
+    };
+}
+
+
+
+/*OrderStockResponse-----------------------------------------------------------*/
+OrderStockResponse::OrderStockResponse(std::string request_id):
+    baseResponse(request_id) {}
+OrderStockResponse::~OrderStockResponse() {}
+
+
+void OrderStockResponse::setResponseInfo(const json& response_info) {
+    msg_cd = response_info["msg_cd"];
+    msg1 = response_info["msg1"];
+    data_obj = response_info["output"];
+}
+
+
+json OrderStockResponse::getResponseInfo() {
+    return {
+        "etc", {
+            {"request_id", request_id},
+            {"time", timestamp},
+        },
+        "data", data_obj
+    };
+}
+
+
+/*InvestorTrendResponse-----------------------------------------------------------*/
+InvestorTrendResponse::InvestorTrendResponse(std::string request_id):
+    baseResponse(request_id) {}
+InvestorTrendResponse::~InvestorTrendResponse() {}
+
+
+void InvestorTrendResponse::setResponseInfo(const json& response_info) {
+    msg_cd = response_info["msg_cd"];
+    msg1 = response_info["msg1"];
+    data_list = response_info["output2"];
+}
+
+
+json InvestorTrendResponse::getResponseInfo() {
+    return {
+        "etc", {
+            {"request_id", request_id},
+            {"time", timestamp},
+        },
+        "data", {
+            {"data_list", data_list}
+        }
     };
 }
 

@@ -89,8 +89,8 @@ int main() {
             std::cerr << "Error: " << e.what() << std::endl;
         }
 
-        // 4. Test get_financial_ratio (주식 재무비율 조회)
-        std::cout << "\n=== Testing get_financial_ratio ===" << std::endl;
+        // 4. Test get_financial_info (주식 재무비율 조회)
+        std::cout << "\n=== Testing get_financial_info ===" << std::endl;
         try {
             mcp::json finratio_params = {
                 {"request_id", "test"},
@@ -98,7 +98,7 @@ int main() {
                 {"fid_cond_mrkt_div_code", "J"},
                 {"fid_input_iscd", "000660"}
             };
-            mcp::json finratio_result = client.call_tool("get_financial_ratio", finratio_params);
+            mcp::json finratio_result = client.call_tool("get_financial_info", finratio_params);
             std::cout << "Fin Ratio: " << finratio_result.dump(2) << std::endl;
         } catch (const mcp::mcp_exception& e){
             std::cerr << "Error: " << e.what() << std::endl;
@@ -116,18 +116,41 @@ int main() {
         } catch (const mcp::mcp_exception& e){
             std::cerr << "Error: " << e.what() << std::endl;
         }
+
+        // 6. Test get_itemchart_handler (주식 과거정보(일,주,월,년) 봉 조회)
+                std::cout << "\n=== Testing get_itemchart_handler ===" << std::endl;
+        try {
+            mcp::json chart_params = {
+                {"request_id", "test"},
+                {"FID_COND_MRKT_DIV_CODE", "J"},
+                {"FID_INPUT_ISCD", "005930"},
+                {"FID_INPUT_DATE_1", "2025-01-01"},
+                {"FID_INPUT_DATE_2", "2025-03-01"},
+                {"FID_PERIOD_DIV_CODE", "D"},
+                {"FID_ORG_ADJ_PRC", "1"}
+            };
+            mcp::json chart_result = client.call_tool("get_itemchart", chart_params);
+            std::cout << "Chart info: " << chart_result.dump(2) << std::endl;
+        } catch (const mcp::mcp_exception& e){
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
         
-        // 6. Test get_stock_codes (티커 조회)
-        // try {
-        //     mcp::json stockcode_params = {
-        //         {"request_id", "test"},
-        //         {"queries", json::array({"삼성전자", "하이닉스"})}
-        //     };
-        //     mcp::json stockcode_result = client.call_tool("get_stock_code", stockcode_params);
-        //     std::cout << "Stock codes: " << stockcode_result.dump(2) << std::endl;
-        // } catch (const mcp::mcp_exception& e){
-        //     std::cerr << "Error: " << e.what() << std::endl;
-        // }
+
+        // 7. Test get_investor_trend (투자자 매매 동향 조회)
+        std::cout << "\n=== Testing get_investor_trend ===" << std::endl;
+        try {
+            mcp::json trend_params = {
+                {"request_id", "test"},
+                {"FID_COND_MRKT_DIV_CODE", "J"},
+                {"FID_INPUT_ISCD", "005930"},
+                {"FID_INPUT_DATE_1", "2025-01-01"}
+            };
+            mcp::json trend_result = client.call_tool("get_investor_trend", trend_params);
+            std::cout << "Investor Trend: " << trend_result.dump(2) << std::endl;
+        } catch (const mcp::mcp_exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+
         // 0. Test ~~
 
 

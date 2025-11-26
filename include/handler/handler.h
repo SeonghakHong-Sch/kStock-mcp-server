@@ -14,6 +14,8 @@
 #include <algorithm>
 #include <json.hpp>
 #include <cstdlib>
+#include <future>
+#include <vector>
 
 using json = nlohmann::json;
 
@@ -25,11 +27,15 @@ mcp::json get_accountinfo_handler(const mcp::json& params, const std::string& /*
 
 mcp::json get_stockprice_handler(const mcp::json& params, const std::string& /* session_id */);
 
-mcp::json get_financial_ratio_handler(const mcp::json& params, const std::string& /* session_id */);
+mcp::json get_financial_info_handler(const mcp::json& params, const std::string& /* session_id */);
 
 mcp::json get_stock_info_handler(const mcp::json& params, const std::string& /* session_id */);
 
-mcp::json StockOrder_handler(const mcp::json& params, const std::string& /* session_id */);
+mcp::json get_itemchart_handler(const mcp::json& params, const std::string& /* session_id */);
+
+mcp::json order_stock_handler(const mcp::json& params, const std::string& /* session_id */);
+
+mcp::json get_investor_trend_handler(const mcp::json& params, const std::string& /* session_id */);
 
 mcp::json disconnect_stock_handler(const mcp::json& params, const std::string& /* session_id */);
 
