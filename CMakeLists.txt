@@ -12,13 +12,11 @@ find_package(Threads REQUIRED)
 #전처리기 추가(stock codes)
 add_definitions(-DDATA_DIR="${CMAKE_SOURCE_DIR}/data")
 
-#ssl 옵션 켜져있는지 검사
-if(MCP_SSL)
-    find_package(OpenSSL 3.0.0 COMPONENTS Crypto SSL REQUIRED)
-    include_directories(${OPENSSL_INCLUDE_DIR}) # before including cpp-httplib to avoid OpenSSL with lower version included 
-    message(STATUS "OpenSSL include directory: ${OPENSSL_INCLUDE_DIR}")
-    add_compile_definitions(MCP_SSL CPPHTTPLIB_OPENSSL_SUPPORT)
-endif()
+# SSL 지원
+find_package(OpenSSL 3.0.0 COMPONENTS Crypto SSL REQUIRED)
+include_directories(${OPENSSL_INCLUDE_DIR})
+message(STATUS "OpenSSL include directory: ${OPENSSL_INCLUDE_DIR}")
+add_compile_definitions(MCP_SSL CPPHTTPLIB_OPENSSL_SUPPORT)
 
 # mcp 라이브러리 빌드, 근데 example이랑 test 불필요한거 제외
 set(MCP_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cpp-mcp)
@@ -37,10 +35,7 @@ target_include_directories(mcp PUBLIC
     ${MCP_LIB_DIR}/common
 )
 
-target_link_libraries(mcp PUBLIC Threads::Threads)
-if(MCP_SSL)
-    target_link_libraries(mcp PUBLIC OpenSSL::SSL OpenSSL::Crypto)
-endif()
+target_link_libraries(mcp PUBLIC Threads::Threads OpenSSL::SSL OpenSSL::Crypto)
 
 add_subdirectory(src)
 add_subdirectory(test)
